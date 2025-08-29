@@ -6,4 +6,3 @@ dj-database-url==3.0.1
 psycopg2-binary==2.9.10
 django-ckeditor==6.5.1
 asgiref==3.8.0
-sqlparse==1.0.5
