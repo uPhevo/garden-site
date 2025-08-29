@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "your-very-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS (разделяем CSV из .env)
+# ALLOWED_HOSTS
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
@@ -106,3 +106,18 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Novosibirsk'
 USE_I18N = True
 USE_TZ = True
+
+# -----------------------
+# Настройка для Timeweb: отдаём статику и медиа на проде
+# -----------------------
+if not DEBUG:
+    # Для gunicorn
+    from django.conf.urls.static import static
+    from django.urls import re_path
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    # В urls.py можно подключить так:
+    # urlpatterns += staticfiles_urlpatterns()
+    # urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+    # На Timeweb это рабочий способ, пока не подключён nginx
+    pass
