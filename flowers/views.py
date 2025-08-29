@@ -6,9 +6,6 @@ from django.core.mail import send_mail
 from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
 import json
-import logging
-
-logger = logging.getLogger(__name__)
 
 def contacts_view(request):
     contacts = Contacts.objects.first()  # берём первую запись из модели Contacts
@@ -113,7 +110,7 @@ def catalog_data(request):
 @csrf_exempt
 @require_POST
 def submit_consultation(request):
-    logger.info(f"CONSULTATION REQUEST RECEIVED: {request.POST}")
+    
     name = request.POST.get('name')
     phone = request.POST.get('phone')
     mail = request.POST.get('mail')
