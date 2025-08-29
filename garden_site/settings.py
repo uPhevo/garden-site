@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "your-very-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS
+# ALLOWED_HOSTS (разделяем CSV из .env)
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
@@ -26,7 +26,7 @@ EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.mail.ru")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "True") == "True"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "skazochniysad@mail.ru")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "t3BS4Hmr9jnjVp4yS5dg")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
 # -----------------------
@@ -88,11 +88,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Статика и медиа
 # -----------------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'project_root/staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'project_root/static']
+STATIC_ROOT = BASE_DIR / 'project_root' / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'project_root' / 'static']
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'project_root/media'
+MEDIA_ROOT = BASE_DIR / 'project_root' / 'media'
 
 # -----------------------
 # CKEditor
