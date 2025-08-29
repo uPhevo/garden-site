@@ -25,9 +25,6 @@ env/
 .coverage
 htmlcov/
 
-# Ignore environment file
-nano.env
-
 # Optional: ignore migrations if ты их не хочешь пушить
 # */migrations/*.py
 # !*/migrations/__init__.py
