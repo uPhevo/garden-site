@@ -14,9 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "your-very-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
+ALLOWED_HOSTS = ["uphevo-garden-site-e87c.twc1.net", "188.225.37.139"]
 
 # -----------------------
 # Почта
