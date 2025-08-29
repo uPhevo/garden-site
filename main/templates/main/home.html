@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сказочный сад</title>
+  <link rel="icon" href="{% static 'mini-logo.png' %}" type="image/png"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { font-family: 'Helvetica Neue', sans-serif; }
+
+    .hero-block {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      position: relative;
+      max-width: 90%;
+      margin: auto;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 15%, white 100%),
+                  url("{% static 'images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg' %}");
+      background-size: cover;
+      background-position: center;
+      filter: brightness(100%);
+      animation: slowZoom 60s infinite alternate linear;
+      z-index: 0;
+    }
+
+    @keyframes slowZoom { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+    #about {
+      margin: 3rem auto;
+      border-radius: 40px;
+      max-width: 95%;
+      padding: 1rem;
+      background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
+      color: #ffffffd8;
+      box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+    }
+
+    #catalog { margin-top: -19px; padding: 0 1rem; box-sizing: border-box; }
+
+    .fireflies-container {
+      position: absolute; width: 100%; height: 100%; pointer-events: none; top: 0; left: 0; z-index: 1; overflow: hidden;
+    }
+
+    .firefly {
+      position: absolute; width: 8px; height: 8px;
+      background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.2) 80%);
+      border-radius: 50%; box-shadow: 0 0 12px gold; opacity: 0.8;
+      animation: moveFirefly linear infinite;
+    }
+
+    @keyframes moveFirefly {
+      0% { transform: translate3d(0,0,0); opacity:0.6; }
+      50% { transform: translate3d(40px,-60px,0); opacity:1; }
+      100% { transform: translate3d(-30px,60px,0); opacity:0.5; }
+    }
+
+    nav { flex-wrap: wrap; }
+    nav a { white-space: nowrap; }
+
+    h1 { font-size: 1.75rem; }
+    @media (min-width: 768px) { h1 { font-size: 3.75rem; } }
+
+    p { font-size: 1rem; }
+    @media (min-width: 768px) { p { font-size: 1.25rem; } }
+
+    .rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 16rem; }
+    @media (max-width: 767px) { .rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 12rem; } }
+
+    section.py-16 { padding: 4rem 0; }
+    @media (max-width: 767px) { section.py-16 { padding: 2rem 0; } }
+
+    section.py-20 { padding: 5rem 0; }
+    @media (max-width: 767px) { section.py-20 { padding: 3rem 0; } }
+
+    form#consultation-form input,
+    form#consultation-form textarea,
+    form#consultation-form button { font-size: 1rem; }
+    @media (max-width: 480px) {
+      form#consultation-form input,
+      form#consultation-form textarea,
+      form#consultation-form button { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body class="text-gray-900">
+
+  <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80"></div>
+
+  <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+    <div class="fireflies-container"></div>
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+      <div class="absolute -top-2">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/logo.png' %}" alt="Логотип" class="h-24 object-contain" />
+        </a>
+      </div>
+      <nav class="ml-auto flex items-center h-full space-x-4 md:space-x-6 text-base text-black">
+        <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
+        <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
+        <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
+        <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+        <a href="{% url 'cart_view' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">🛒 Корзина</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-block mt-8">
+    <div class="hero-bg"></div>
+    <div class="fireflies-container"></div>
+    <div class="relative z-10 text-center px-4 md:px-0 py-16">
+      <h1 class="text-white drop-shadow-lg mb-4">Добро пожаловать в Сказочный Сад</h1>
+      <p class="text-white drop-shadow-md max-w-2xl mx-auto">Место, где цветы оживают, а каждый листик нашептывает сказку. Фуксии, бегонии и гортензии ждут своего часа зацвести у вас дома.</p>
+      <a href="{% url 'catalog' %}" class="mt-8 inline-block bg-yellow-600 text-white px-6 py-3 rounded-xl text-lg hover:bg-yellow-700 transition">Смотреть каталог</a>
+    </div>
+  </section>
+
+  <section id="catalog" class="py-0">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center mb-8 text-white drop-shadow-md">Популярные цветы</h2>
+      <div class="grid gap-8 grid-cols-1 md:grid-cols-3">
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'images/фуксия.jpg' %}'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Фуксия</h3>
+            <p class="text-sm drop-shadow-md">Идеальна для подвесных кашпо и оживления тенистых уголков.</p>
+          </div>
+        </div>
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'images/бегония.jpg' %}'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Бегония</h3>
+            <p class="text-sm drop-shadow-md">Пышное цветение и разнообразие оттенков для вашего сада.</p>
+          </div>
+        </div>
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'images/горт.jpg' %}'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Гортензия</h3>
+            <p class="text-sm drop-shadow-md">Настоящая королева сада — воздушная, элегантная, сказочная.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-24 text-center bg-yellow-500">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-4">О магазине</h2>
+      <p class="text-lg">"Сказочный сад" — это не просто магазин, это портал в мир, где цветы живут как персонажи сказки. Мы помогаем создать атмосферу уюта и вдохновения у вас дома и в саду.</p>
+    </div>
+  </section>
+
+  <section id="order" class="py-20 bg-white bg-opacity-80 backdrop-blur-md text-gray-800 px-4">
+    <div class="max-w-xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-8">Хотите задать вопрос?</h2>
+      <form id="consultation-form" class="space-y-6" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Ваше имя" class="w-full px-4 py-3 border rounded-xl" required>
+        <input type="tel" name="phone" placeholder="Телефон" class="w-full px-4 py-3 border rounded-xl" required>
+        <input type="email" name="mail" placeholder="Почта" class="w-full px-4 py-3 border rounded-xl" required>
+        <textarea name="message" placeholder="Комментарий к заказу" class="w-full px-4 py-3 border rounded-xl" required></textarea>
+        <button type="submit" class="w-full bg-yellow-600 text-white py-3 rounded-xl hover:bg-yellow-700 transition">Оставить заявку</button>
+      </form>
+      <p id="consultation-success" style="display:none; color:green; margin-top:1rem;">✅ Заявка отправлена! Спасибо! 😊</p>
+      <p id="consultation-error" style="display:none; color:red; margin-top:1rem;">❌ Ошибка отправки заявки. Попробуйте позже.</p>
+    </div>
+  </section>
+
+  <footer class="bg-gray-100 py-6 text-center text-gray-500 text-sm">
+    &copy; 2025 Сказочный сад.
+  </footer>
+
+  <script>
+    const container = document.querySelectorAll(".fireflies-container");
+    container.forEach(cont => {
+      for (let i = 0; i < 20; i++) {
+        const firefly = document.createElement("div");
+        firefly.classList.add("firefly");
+        firefly.style.top = `${Math.random() * 100}%`;
+        firefly.style.left = `${Math.random() * 100}%`;
+        firefly.style.animationDuration = `${5 + Math.random() * 6}s`;
+        firefly.style.animationDelay = `${Math.random() * 5}s`;
+        cont.appendChild(firefly);
+      }
+    });
+
+    // AJAX для формы консультации
+    const form = document.getElementById('consultation-form');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("{% url 'submit_consultation' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success){
+          document.getElementById('consultation-success').style.display = 'block';
+          document.getElementById('consultation-error').style.display = 'none';
+          form.reset();
+        } else {
+          document.getElementById('consultation-success').style.display = 'none';
+          document.getElementById('consultation-error').innerText = data.error || "❌ Ошибка отправки заявки.";
+          document.getElementById('consultation-error').style.display = 'block';
+        }
+      })
+      .catch(() => {
+        document.getElementById('consultation-success').style.display = 'none';
+        document.getElementById('consultation-error').innerText = "❌ Ошибка сети. Попробуйте позже.";
+        document.getElementById('consultation-error').style.display = 'block';
+      });
+    });
+  </script>
+
+</body>
+</html>

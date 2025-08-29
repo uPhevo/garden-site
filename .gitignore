@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+
+# Byte-compiled / cache
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.mo
+*.swp
+*.DS_Store
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Ignore environment file
+nano.env
+
+# Optional: ignore migrations if ты их не хочешь пушить
+# */migrations/*.py
+# !*/migrations/__init__.py

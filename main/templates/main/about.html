@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>О нас — Сказочный сад</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .block {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .block::after {
+      content: "";
+      min-height: 100vh;
+      background: url(/static/images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg);
+      background-size: cover;
+      background-position: center;
+      filter: brightness(90%);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: -1;
+      border-radius: inherit;
+      image-rendering: auto;
+
+      /* Плавный переход внизу */
+      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    }
+
+    .fireflies-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .firefly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.2) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 12px gold;
+      opacity: 0.8;
+      animation: moveFirefly linear infinite;
+    }
+
+    @keyframes moveFirefly {
+      0% {
+        transform: translate3d(0, 0, 0);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate3d(40px, -60px, 0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(-30px, 60px, 0);
+        opacity: 0.5;
+      }
+    }
+
+    .animate-slowZoom {
+      animation: slowZoom 60s infinite alternate linear;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-white to-gray-100 text-gray-900 font-sans flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+    <div class="fireflies-container"></div>
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+      <div class="absolute -top-2">
+        <a href="{% url 'home' %}">
+          <img src="/static/images/logo.png" alt="Логотип" class="h-24 object-contain" />
+        </a>
+      </div>
+
+      <nav class="ml-auto flex items-center h-full space-x-6 text-sm md:text-base text-black">
+        <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
+        <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
+        <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
+        <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+        <a href="{% url 'cart_view' %}"
+           class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">
+          🛒 Корзина
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Градиент над фоном -->
+  <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80 z-10"></div>
+
+  <!-- Контент -->
+  <main class="block flex-grow flex items-center justify-center px-4 pt-10 pb-16">
+    <div class="bg-white bg-opacity-80 backdrop-blur-lg p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-4xl mt-10 mb-10">
+      <h1 class="text-2xl md:text-3xl font-bold text-center mb-6">{{ about.title }}</h1>
+      <div class="space-y-4 text-center text-base md:text-xl prose">
+        {{ about.content|safe }}
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 py-6 text-center text-gray-500 text-sm">
+    &copy; 2025 Сказочный сад.
+  </footer>
+
+  <!-- JS: Fireflies -->
+  <script>
+    const container = document.querySelector(".fireflies-container");
+    for (let i = 0; i < 20; i++) {
+      const firefly = document.createElement("div");
+      firefly.classList.add("firefly");
+      firefly.style.top = `${Math.random() * 100}%`;
+      firefly.style.left = `${Math.random() * 100}%`;
+      firefly.style.animationDuration = `${5 + Math.random() * 6}s`;
+      firefly.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(firefly);
+    }
+  </script>
+</body>
+</html>

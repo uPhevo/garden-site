@@ -1,0 +1,7 @@
+Django==5.2.5
+gunicorn==23.0.0
+Pillow==11.3.0
+python-dotenv==1.1.1
+dj-database-url==3.0.1
+psycopg2-binary==2.9.10
+django-ckeditor==6.5.1
