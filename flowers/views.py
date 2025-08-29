@@ -1,36 +1,38 @@
+import json
+import logging
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import send_mail
-from flowers.models import Flower, Category, WorkCondition, About, Contacts
+from django.core.mail import send_mail, BadHeaderError
 from django.db import models
-import json
-import logging
-import asyncio
-from asgiref.sync import sync_to_async
+from flowers.models import Flower, Category, WorkCondition, About, Contacts
 
 logger = logging.getLogger(__name__)
 
-# -------------------------
+
+# ----------------------------
 # Основные страницы
-# -------------------------
+# ----------------------------
 def contacts_view(request):
     contacts = Contacts.objects.first()
     return render(request, "main/contacts.html", {"contacts": contacts})
 
+
 def about_view(request):
     about = About.objects.first()
     return render(request, "about.html", {"about": about})
+
 
 def personals(request):
     conditions = WorkCondition.objects.first()
     return render(request, "main/personals.html", {"conditions": conditions})
 
 
-# -------------------------
-# Каталог и фильтры
-# -------------------------
+# ----------------------------
+# Каталог
+# ----------------------------
 def catalog(request):
     categories = Category.objects.all()
     search_text = request.GET.get('search', '').strip()
@@ -41,6 +43,7 @@ def catalog(request):
     category_id = request.GET.get('category')
 
     flowers = Flower.objects.all()
+
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
 
@@ -70,8 +73,16 @@ def catalog(request):
         flowers = flowers.order_by(sort_mapping[selected_sort])
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = [{'id': f.id, 'name': f.name, 'price': str(f.price), 'in_stock': getattr(f, 'in_stock', True),
-                 'image_url': f.image.url if f.image else ''} for f in flowers]
+        data = [
+            {
+                'id': flower.id,
+                'name': flower.name,
+                'price': str(flower.price),
+                'in_stock': getattr(flower, 'in_stock', True),
+                'image_url': flower.image.url if flower.image else '',
+            }
+            for flower in flowers
+        ]
         return JsonResponse({'flowers': data})
 
     context = {
@@ -93,27 +104,24 @@ def catalog_data(request):
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
 
-    data = [{'id': f.id, 'name': f.name, 'price': str(f.price), 'image': f.image.url if f.image else ''} for f in flowers]
+    data = [
+        {
+            'id': flower.id,
+            'name': flower.name,
+            'price': str(flower.price),
+            'image': flower.image.url if flower.image else '',
+        }
+        for flower in flowers
+    ]
     return JsonResponse({'flowers': data})
 
 
-# -------------------------
-# Асинхронная отправка почты
-# -------------------------
-async def async_send_mail(subject, message, from_email, recipient_list):
-    await sync_to_async(send_mail)(
-        subject=subject,
-        message=message,
-        from_email=from_email,
-        recipient_list=recipient_list,
-        fail_silently=False,
-    )
-
-
+# ----------------------------
+# Консультация
+# ----------------------------
 @csrf_exempt
 @require_POST
 def submit_consultation(request):
-    logger.info(f"CONSULTATION REQUEST RECEIVED: {request.POST}")
     name = request.POST.get('name')
     phone = request.POST.get('phone')
     mail = request.POST.get('mail')
@@ -124,29 +132,32 @@ def submit_consultation(request):
 
     email_body = f"Новая заявка на консультацию:\n\nИмя: {name}\nТелефон: {phone}\nПочта: {mail}\nСообщение:\n{message}"
 
-    # Запускаем асинхронную отправку в фоновом режиме
-    asyncio.create_task(async_send_mail(
-        subject="📝 Запрос на консультацию — Сказочный сад",
-        message=email_body,
-        from_email="skazochniysad@mail.ru",
-        recipient_list=["skazochniysad@mail.ru"]
-    ))
+    try:
+        send_mail(
+            subject="📝 Запрос на консультацию — Сказочный сад",
+            message=email_body,
+            from_email=None,  # будет использовать DEFAULT_FROM_EMAIL
+            recipient_list=[mail, 'skazochniysad@mail.ru'],
+            fail_silently=False,
+        )
+        return JsonResponse({'success': True, 'message': '✅ Заявка отправлена!'})
+    except BadHeaderError:
+        return JsonResponse({'success': False, 'error': 'Неверный заголовок в письме'})
+    except Exception as e:
+        logger.error(f"Error sending consultation email: {e}")
+        return JsonResponse({'success': False, 'error': str(e)})
 
-    return JsonResponse({'success': True, 'message': '✅ Заявка отправлена! Письмо отправляется в фоне 😊'})
 
-
-# -------------------------
+# ----------------------------
 # Корзина
-# -------------------------
+# ----------------------------
 def get_cart_items(request):
     cart = request.session.get('cart', {})
     flowers = Flower.objects.filter(id__in=cart.keys())
-    items = []
-    for flower in flowers:
-        qty = cart.get(str(flower.id), 0)
-        subtotal = qty * flower.price
-        items.append({'flower': flower, 'quantity': qty, 'subtotal': subtotal})
-    return items
+    return [
+        {'flower': flower, 'quantity': cart.get(str(flower.id), 0), 'subtotal': flower.price * cart.get(str(flower.id), 0)}
+        for flower in flowers
+    ]
 
 
 def get_cart_total(items):
@@ -160,10 +171,9 @@ def cart_view(request):
 
 
 def add_to_cart(request, flower_id):
-    flower = get_object_or_404(Flower, id=flower_id)
     if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
         cart = request.session.get('cart', {})
+        quantity = int(request.POST.get('quantity', 1))
         cart[str(flower_id)] = cart.get(str(flower_id), 0) + quantity
         request.session['cart'] = cart
         request.session.modified = True
@@ -173,8 +183,7 @@ def add_to_cart(request, flower_id):
 
 def flower_detail(request, pk):
     flower = get_object_or_404(Flower, pk=pk)
-    cart = request.session.get('cart', {})
-    cart_ids = [int(k) for k in cart.keys()]
+    cart_ids = list(map(int, request.session.get('cart', {}).keys()))
     return render(request, 'flowers/detail.html', {'flower': flower, 'cart_ids': cart_ids})
 
 
@@ -193,33 +202,35 @@ def submit_order(request):
         return JsonResponse({'success': False, 'error': 'Корзина пуста.'})
 
     flowers = Flower.objects.filter(id__in=cart.keys())
-    total = 0
+    total = sum(cart[str(flower.id)] * flower.price for flower in flowers)
+
     message = f"Новый заказ от {name}\nEmail: {email}\nТелефон: {phone}\nДоставка: {delivery}\n\nЗаказ:\n"
     for flower in flowers:
-        qty = cart.get(str(flower.id), 0)
+        qty = cart[str(flower.id)]
         subtotal = qty * flower.price
-        total += subtotal
         message += f"- {flower.name} x{qty} = {subtotal} ₽\n"
     message += f"\nИтого: {total} ₽"
 
-    # Отправляем заказ асинхронно
-    asyncio.create_task(async_send_mail(
-        subject="🌸 Новый заказ — Сказочный сад",
-        message=message,
-        from_email="skazochniysad@mail.ru",
-        recipient_list=["skazochniysad@mail.ru"]
-    ))
-
-    del request.session['cart']
-    request.session.modified = True
-    return JsonResponse({'success': True, 'message': 'Заказ оформлен! Письмо отправляется в фоне 😊'})
+    try:
+        send_mail(
+            subject="🌸 Новый заказ — Сказочный сад",
+            message=message,
+            from_email=None,
+            recipient_list=[email, 'skazochniysad@mail.ru'],
+            fail_silently=False,
+        )
+        request.session['cart'] = {}
+        request.session.modified = True
+        return JsonResponse({'success': True, 'message': '✅ Заказ отправлен!'})
+    except Exception as e:
+        logger.error(f"Error sending order email: {e}")
+        return JsonResponse({'success': False, 'error': str(e)})
 
 
 @require_POST
 def clear_cart(request):
-    if 'cart' in request.session:
-        del request.session['cart']
-        request.session.modified = True
+    request.session['cart'] = {}
+    request.session.modified = True
     return redirect('cart_view')
 
 
@@ -227,18 +238,16 @@ def clear_cart(request):
 def toggle_cart(request, flower_id):
     try:
         data = json.loads(request.body)
-        quantity = int(data.get('quantity', 1))
-        if quantity < 1:
-            quantity = 1
+        quantity = max(int(data.get('quantity', 1)), 1)
     except (ValueError, json.JSONDecodeError):
         return JsonResponse({'error': 'Неверное количество'}, status=400)
 
     cart = request.session.get('cart', {})
     flower_id_str = str(flower_id)
+    added = False
 
     if flower_id_str in cart:
         del cart[flower_id_str]
-        added = False
     else:
         cart[flower_id_str] = quantity
         added = True
