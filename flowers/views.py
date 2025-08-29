@@ -7,11 +7,16 @@ from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
 import json
 import logging
+import asyncio
+from asgiref.sync import sync_to_async
 
 logger = logging.getLogger(__name__)
 
+# -------------------------
+# Основные страницы
+# -------------------------
 def contacts_view(request):
-    contacts = Contacts.objects.first()  # берём первую запись из модели Contacts
+    contacts = Contacts.objects.first()
     return render(request, "main/contacts.html", {"contacts": contacts})
 
 def about_view(request):
@@ -19,17 +24,15 @@ def about_view(request):
     return render(request, "about.html", {"about": about})
 
 def personals(request):
-    # Берём первую запись с условиями работы
     conditions = WorkCondition.objects.first()
     return render(request, "main/personals.html", {"conditions": conditions})
 
 
+# -------------------------
+# Каталог и фильтры
+# -------------------------
 def catalog(request):
-    """
-    Главный каталог с фильтрацией и AJAX.
-    """
     categories = Category.objects.all()
-
     search_text = request.GET.get('search', '').strip()
     selected_in_stock = request.GET.get('in_stock') == 'on'
     price_min = request.GET.get('price_min')
@@ -38,7 +41,6 @@ def catalog(request):
     category_id = request.GET.get('category')
 
     flowers = Flower.objects.all()
-
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
 
@@ -67,17 +69,9 @@ def catalog(request):
     if selected_sort in sort_mapping:
         flowers = flowers.order_by(sort_mapping[selected_sort])
 
-    # Обработка AJAX-запроса
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = []
-        for flower in flowers:
-            data.append({
-                'id': flower.id,
-                'name': flower.name,
-                'price': str(flower.price),
-                'in_stock': getattr(flower, 'in_stock', True),
-                'image_url': flower.image.url if flower.image else '',
-            })
+        data = [{'id': f.id, 'name': f.name, 'price': str(f.price), 'in_stock': getattr(f, 'in_stock', True),
+                 'image_url': f.image.url if f.image else ''} for f in flowers]
         return JsonResponse({'flowers': data})
 
     context = {
@@ -99,15 +93,21 @@ def catalog_data(request):
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
 
-    data = []
-    for flower in flowers:
-        data.append({
-            'id': flower.id,
-            'name': flower.name,
-            'price': str(flower.price),
-            'image': flower.image.url if flower.image else '',
-        })
+    data = [{'id': f.id, 'name': f.name, 'price': str(f.price), 'image': f.image.url if f.image else ''} for f in flowers]
     return JsonResponse({'flowers': data})
+
+
+# -------------------------
+# Асинхронная отправка почты
+# -------------------------
+async def async_send_mail(subject, message, from_email, recipient_list):
+    await sync_to_async(send_mail)(
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipient_list=recipient_list,
+        fail_silently=False,
+    )
 
 
 @csrf_exempt
@@ -122,24 +122,22 @@ def submit_consultation(request):
     if not all([name, phone, mail, message]):
         return JsonResponse({'success': False, 'error': 'Пожалуйста, заполните все поля.'})
 
-    email_body = (
-        f"Новая заявка на консультацию:\n\n"
-        f"Имя: {name}\nТелефон: {phone}\nПочта: {mail}\nСообщение:\n{message}"
-    )
+    email_body = f"Новая заявка на консультацию:\n\nИмя: {name}\nТелефон: {phone}\nПочта: {mail}\nСообщение:\n{message}"
 
-    try:
-        send_mail(
-            subject="📝 Запрос на консультацию — Сказочный сад",
-            message=email_body,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
-            fail_silently=False,
-        )
-        return JsonResponse({'success': True})
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})
+    # Запускаем асинхронную отправку в фоновом режиме
+    asyncio.create_task(async_send_mail(
+        subject="📝 Запрос на консультацию — Сказочный сад",
+        message=email_body,
+        from_email="skazochniysad@mail.ru",
+        recipient_list=["skazochniysad@mail.ru"]
+    ))
+
+    return JsonResponse({'success': True, 'message': '✅ Заявка отправлена! Письмо отправляется в фоне 😊'})
 
 
+# -------------------------
+# Корзина
+# -------------------------
 def get_cart_items(request):
     cart = request.session.get('cart', {})
     flowers = Flower.objects.filter(id__in=cart.keys())
@@ -204,19 +202,17 @@ def submit_order(request):
         message += f"- {flower.name} x{qty} = {subtotal} ₽\n"
     message += f"\nИтого: {total} ₽"
 
-    try:
-        send_mail(
-            subject="🌸 Новый заказ — Сказочный сад",
-            message=message,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
-            fail_silently=False,
-        )
-        del request.session['cart']
-        request.session.modified = True
-        return JsonResponse({'success': True, 'message': 'Заказ отправлен! Спасибо! 😊'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': f'Ошибка при отправке: {e}'})
+    # Отправляем заказ асинхронно
+    asyncio.create_task(async_send_mail(
+        subject="🌸 Новый заказ — Сказочный сад",
+        message=message,
+        from_email="skazochniysad@mail.ru",
+        recipient_list=["skazochniysad@mail.ru"]
+    ))
+
+    del request.session['cart']
+    request.session.modified = True
+    return JsonResponse({'success': True, 'message': 'Заказ оформлен! Письмо отправляется в фоне 😊'})
 
 
 @require_POST
