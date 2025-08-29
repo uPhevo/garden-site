@@ -5,7 +5,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
+from django.conf import settings
+import threading
 import json
+
+# Асинхронная отправка письма
+def send_email_async(subject, message, from_email, recipient_list):
+    try:
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+    except Exception as e:
+        print(f"Ошибка отправки почты: {e}")
 
 def contacts_view(request):
     contacts = Contacts.objects.first()
@@ -19,10 +28,8 @@ def personals(request):
     conditions = WorkCondition.objects.first()
     return render(request, "main/personals.html", {"conditions": conditions})
 
-
 def catalog(request):
     categories = Category.objects.all()
-
     search_text = request.GET.get('search', '').strip()
     selected_in_stock = request.GET.get('in_stock') == 'on'
     price_min = request.GET.get('price_min')
@@ -31,18 +38,14 @@ def catalog(request):
     category_id = request.GET.get('category')
 
     flowers = Flower.objects.all()
-
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
-
     if search_text:
         flowers = flowers.filter(
             models.Q(name__icontains=search_text) | models.Q(description__icontains=search_text)
         )
-
     if selected_in_stock:
         flowers = flowers.filter(in_stock=True)
-
     try:
         if price_min:
             flowers = flowers.filter(price__gte=float(price_min))
@@ -84,13 +87,11 @@ def catalog(request):
     }
     return render(request, 'main/catalog.html', context)
 
-
 def catalog_data(request):
     category_id = request.GET.get('category')
     flowers = Flower.objects.all()
     if category_id and category_id.isdigit():
         flowers = flowers.filter(category_id=category_id)
-
     data = []
     for flower in flowers:
         data.append({
@@ -100,7 +101,6 @@ def catalog_data(request):
             'image': flower.image.url if flower.image else '',
         })
     return JsonResponse({'flowers': data})
-
 
 @csrf_exempt
 @require_POST
@@ -118,18 +118,18 @@ def submit_consultation(request):
         f"Имя: {name}\nТелефон: {phone}\nПочта: {mail}\nСообщение:\n{message}"
     )
 
-    try:
-        send_mail(
-            subject="📝 Запрос на консультацию — Сказочный сад",
-            message=email_body,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
-            fail_silently=False,
+    # Отправляем письмо в отдельном потоке
+    threading.Thread(
+        target=send_email_async,
+        args=(
+            "📝 Запрос на консультацию — Сказочный сад",
+            email_body,
+            settings.DEFAULT_FROM_EMAIL,
+            ["skazochniysad@mail.ru"],
         )
-        return JsonResponse({'success': True, 'message': '✅ Заявка отправлена! Спасибо! 😊'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': f'❌ Ошибка отправки: {e}'})
+    ).start()
 
+    return JsonResponse({'success': True, 'message': '✅ Заявка отправлена! Спасибо! 😊'})
 
 def get_cart_items(request):
     cart = request.session.get('cart', {})
@@ -141,16 +141,13 @@ def get_cart_items(request):
         items.append({'flower': flower, 'quantity': qty, 'subtotal': subtotal})
     return items
 
-
 def get_cart_total(items):
     return sum(item['subtotal'] for item in items)
-
 
 def cart_view(request):
     items = get_cart_items(request)
     total = get_cart_total(items)
     return render(request, 'flowers/cart.html', {'items': items, 'total': total})
-
 
 def add_to_cart(request, flower_id):
     flower = get_object_or_404(Flower, id=flower_id)
@@ -163,13 +160,11 @@ def add_to_cart(request, flower_id):
         return redirect('cart_view')
     return redirect('flower_detail', pk=flower_id)
 
-
 def flower_detail(request, pk):
     flower = get_object_or_404(Flower, pk=pk)
     cart = request.session.get('cart', {})
     cart_ids = [int(k) for k in cart.keys()]
     return render(request, 'flowers/detail.html', {'flower': flower, 'cart_ids': cart_ids})
-
 
 @require_POST
 def submit_order(request):
@@ -195,20 +190,19 @@ def submit_order(request):
         message += f"- {flower.name} x{qty} = {subtotal} ₽\n"
     message += f"\nИтого: {total} ₽"
 
-    try:
-        send_mail(
-            subject="🌸 Новый заказ — Сказочный сад",
-            message=message,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
-            fail_silently=False,
+    threading.Thread(
+        target=send_email_async,
+        args=(
+            "🌸 Новый заказ — Сказочный сад",
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            ["skazochniysad@mail.ru"]
         )
-        del request.session['cart']
-        request.session.modified = True
-        return JsonResponse({'success': True, 'message': 'Заказ отправлен! Спасибо! 😊'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': f'Ошибка при отправке: {e}'})
+    ).start()
 
+    del request.session['cart']
+    request.session.modified = True
+    return JsonResponse({'success': True, 'message': 'Заказ отправлен! Спасибо! 😊'})
 
 @require_POST
 def clear_cart(request):
@@ -216,7 +210,6 @@ def clear_cart(request):
         del request.session['cart']
         request.session.modified = True
     return redirect('cart_view')
-
 
 @require_POST
 def toggle_cart(request, flower_id):
