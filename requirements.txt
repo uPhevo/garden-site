@@ -1,7 +1,26 @@
+# Основной фреймворк
 Django==5.2.5
+
+# WSGI сервер для продакшн
 gunicorn==23.0.0
+
+# Работа с изображениями
 Pillow==11.3.0
+
+# Работа с .env файлами
 python-dotenv==1.1.1
-dj-database-url==3.0.1
+
+# Работа с PostgreSQL
 psycopg2-binary==2.9.10
+dj-database-url==3.0.1
+
+# Редактор текста с загрузкой файлов
 django-ckeditor==6.5.1
+
+# Вспомогательные зависимости Django
+asgiref==3.8.2
+sqlparse==0.4.4
+tzdata==2025.7
+
+# Для локальных или админских улучшений (опционально, но часто полезно)
+django-widget-tweaks==1.5.0
