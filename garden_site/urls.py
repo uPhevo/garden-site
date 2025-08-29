@@ -8,6 +8,6 @@ urlpatterns = [
     path('', include('flowers.urls')),
 ]
 
-# Подключаем статику и медиа всегда (для Timeweb)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# Подключаем статику и медиа только если DEBUG=False или для тестов
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

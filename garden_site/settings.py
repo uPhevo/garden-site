@@ -14,7 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "your-very-secret-key")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["uphevo-garden-site-e87c.twc1.net", "188.225.37.139"]
+# ALLOWED_HOSTS (разделяем CSV из .env)
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
 # -----------------------
 # Почта
@@ -86,11 +88,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Статика и медиа
 # -----------------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'project_root' / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'project_root' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'            # куда collectstatic складывает файлы
+STATICFILES_DIRS = [BASE_DIR / 'static']          # откуда Django берёт файлы для collectstatic
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'project_root' / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # -----------------------
 # CKEditor
@@ -104,18 +106,3 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Novosibirsk'
 USE_I18N = True
 USE_TZ = True
-
-# -----------------------
-# Настройка для Timeweb: отдаём статику и медиа на проде
-# -----------------------
-if not DEBUG:
-    # Для gunicorn
-    from django.conf.urls.static import static
-    from django.urls import re_path
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-    # В urls.py можно подключить так:
-    # urlpatterns += staticfiles_urlpatterns()
-    # urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
-    # На Timeweb это рабочий способ, пока не подключён nginx
-    pass
