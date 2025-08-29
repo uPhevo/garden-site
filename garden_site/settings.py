@@ -45,6 +45,13 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
 ]
 
+# Разрешенные домены для CSRF-запросов
+CSRF_TRUSTED_ORIGINS = [
+    'https://uphevo-garden-site-e87c.twc1.net',
+    'https://www.uphevo-garden-site-e87c.twc1.net',  # если нужен www
+]
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
