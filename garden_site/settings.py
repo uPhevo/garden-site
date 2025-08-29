@@ -1,26 +1,37 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+import dj_database_url
 
-# ----------------------------
-# Базовые директории
-# ----------------------------
+# Загружаем переменные из nano.env
+load_dotenv('nano.env')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ----------------------------
+# -----------------------
 # Основные настройки
-# ----------------------------
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'replace-this-with-a-secure-key')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+# -----------------------
+SECRET_KEY = os.getenv("SECRET_KEY", "your-very-secret-key")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'uphevo-garden-site-e87c.twc1.net',
-]
+# ALLOWED_HOSTS (разделяем CSV из .env)
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
-# ----------------------------
+# -----------------------
+# Почта
+# -----------------------
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.mail.ru")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "True") == "True"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "skazochniysad@mail.ru")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+
+# -----------------------
 # Приложения
-# ----------------------------
+# -----------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,13 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main',
     'flowers',
-    'django_ckeditor_5',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
-# ----------------------------
-# Middleware
-# ----------------------------
+# Разрешенные домены для CSRF-запросов
+CSRF_TRUSTED_ORIGINS = [
+    'https://uphevo-garden-site-e87c.twc1.net',
+    'https://www.uphevo-garden-site-e87c.twc1.net',  # если нужен www
+]
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,18 +59,14 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'project_root.urls'
+ROOT_URLCONF = 'garden_site.urls'
 
-# ----------------------------
-# Шаблоны
-# ----------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'main' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,82 +79,56 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project_root.wsgi.application'
+WSGI_APPLICATION = 'garden_site.wsgi.application'
 
-# ----------------------------
-# База данных (Postgres пример)
-# ----------------------------
+# -----------------------
+# База данных
+# -----------------------
+db_url = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'garden_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-    }
+    "default": dj_database_url.parse(db_url, conn_max_age=600, ssl_require=not DEBUG)
 }
 
-# ----------------------------
-# Пароли и валидация
-# ----------------------------
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ----------------------------
-# Локализация
-# ----------------------------
-LANGUAGE_CODE = 'ru-ru'
-TIME_ZONE = 'Asia/Novosibirsk'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-# ----------------------------
+# -----------------------
 # Статика и медиа
-# ----------------------------
+# -----------------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # collectstatic соберёт сюда
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ----------------------------
-# Сессии
-# ----------------------------
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# -----------------------
+# CKEditor
+# -----------------------
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
-# ----------------------------
-# CSRF и доверенные домены
-# ----------------------------
-CSRF_TRUSTED_ORIGINS = [
-    'https://uphevo-garden-site-e87c.twc1.net',
-]
+# -----------------------
+# Локализация
+# -----------------------
+LANGUAGE_CODE = 'ru-ru'
+TIME_ZONE = 'Asia/Novosibirsk'
+USE_I18N = True
+USE_TZ = True
 
-# ----------------------------
-# Почта (SMTP)
-# ----------------------------
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'skazochniysad@mail.ru')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', 'your-email-password')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# ----------------------------
-# Безопасность для продакшена
-# ----------------------------
-if not DEBUG:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 3600
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_SSL_REDIRECT = True
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django_errors.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+    },
+}
