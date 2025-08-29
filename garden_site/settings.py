@@ -88,8 +88,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Статика и медиа
 # -----------------------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'            # куда collectstatic складывает файлы
-STATICFILES_DIRS = [BASE_DIR / 'static']          # откуда Django берёт файлы для collectstatic
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # collectstatic соберёт сюда
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -106,3 +105,23 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Novosibirsk'
 USE_I18N = True
 USE_TZ = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django_errors.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+    },
+}
