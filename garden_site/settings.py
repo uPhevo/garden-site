@@ -1,26 +1,31 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Загружаем переменные из nano.env
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'your-very-secret-key'
+# Секретный ключ
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
-DEBUG = True
+# Режим дебага для продакшн
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['uphevo-garden-site-e87c.twc1.net']
+# Разрешённые хосты
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'uphevo-garden-site-e87c.twc1.net').split(',')
 
+# Почтовый сервер
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.mail.ru')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 465))
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'skazochniysad@mail.ru')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 't3BS4Hmr9jnjVp4yS5dg')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
-EMAIL_HOST_USER = 'skazochniysad@mail.ru'       
-EMAIL_HOST_PASSWORD = 'iZwb1D2AuSAhw42dRKSy'     
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-
+# Приложения
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,7 +36,7 @@ INSTALLED_APPS = [
     'main',
     'flowers',
     'ckeditor',
-    'ckeditor_uploader', 
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -61,9 +66,9 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'garden_site.wsgi.application'
 
+# База данных (SQLite)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -71,20 +76,28 @@ DATABASES = {
     }
 }
 
-
+# Медиа
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Статика
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+# Локализация
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Novosibirsk'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
+# Безопасность для дебага
 SECURE_SSL_REDIRECT = False
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
+
+# Настройки по умолчанию для auto field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
