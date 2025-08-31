@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Каталог — Сказочный сад</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    /* Фон основной области */
+    .block {
+      display: block;
+      overflow: hidden;
+    }
+    .block::after {
+      content: "";
+      background: url(/static/images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg);
+      background-size: cover;
+      background-position: center;
+      filter: brightness(90%);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: -1;
+      border-radius: inherit;
+      image-rendering: auto;
+      /* Плавный переход внизу */
+      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    }
+    /* Светлячки */
+    .fireflies-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      top: 0; left: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .firefly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.2) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 12px gold;
+      opacity: 0.8;
+      animation: moveFirefly linear infinite;
+    }
+    @keyframes moveFirefly {
+      0% { transform: translate3d(0,0,0); opacity: 0.6; }
+      50% { transform: translate3d(40px,-60px,0); opacity: 1; }
+      100% { transform: translate3d(-30px,60px,0); opacity: 0.5; }
+    }
+    /* Карточки цветов формат 3:4 */
+    .card-img-wrapper {
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900 font-sans">
+
+  <div class="block">
+    <div class="background-with-gradient"></div>
+
+    <!-- Header -->
+    <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+      <div class="fireflies-container"></div>
+      <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+        <div class="absolute -top-2">
+          <a href="{% url 'home' %}">
+            <img src="/static/images/logo.png" alt="Логотип" class="h-24 object-contain" />
+          </a>
+        </div>
+
+        <nav class="ml-auto flex items-center h-full space-x-6 text-base text-black">
+          <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">
+            Каталог
+          </a>
+          <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">
+            О нас
+          </a>
+          <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">
+            Связь
+          </a>
+          <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">
+            Условия работы
+          </a>
+          <!-- Кнопка корзины -->
+          <a href="{% url 'cart_view' %}"
+             class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200"
+          >
+            🛒 Корзина
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Градиент под header -->
+    <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80 pointer-events-none"></div>
+
+    <h1 class="text-4xl font-bold mb-8 text-center text-white" style="margin-top: 50px">Каталог цветов</h1>
+
+    <!-- Основной контент: фильтр сверху на мобилках, сбоку на десктопе -->
+    <div class="flex flex-col md:flex-row flex-1 max-w-7xl mx-auto px-4 pt-6 pb-10 space-y-6 md:space-y-0 md:space-x-6" style="margin-top: 30px;">
+
+      <!-- Фильтр -->
+      <aside id="filters" class="w-full md:w-80 bg-white bg-opacity-90 p-6 rounded-3xl shadow-lg h-fit max-h-[calc(100vh-6rem)] overflow-y-auto z-10 sticky md:sticky top-24 md:top-24">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-900">Фильтры</h2>
+
+        <!-- Поиск по названию и описанию -->
+        <div class="mb-6">
+          <label for="search" class="search font-semibold mb-2 text-gray-700">Поиск</label>
+          <input id="search" type="text" placeholder="Название или описание..." class="w-full p-2 border rounded text-gray-700" />
+        </div>
+
+        <!-- Кнопка с выпадающим списком категорий -->
+          <div class="mb-6 relative inline-block text-left z-30"> <!-- z-30, чтобы над фоном был -->
+            <button id="categoryToggleBtn" type="button"
+              class="inline-flex justify-center w-full rounded-xl border border-yellow-600 bg-yellow-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              aria-haspopup="true" aria-expanded="false">
+              Категории
+              <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <div id="categoryList" class="origin-top-left absolute left-0 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden max-h-32 overflow-auto"
+                style="background-color: #fff; opacity: 1;">
+              <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="categoryToggleBtn">
+                <a href="{% url 'catalog' %}" class="block px-3 py-1 text-sm text-gray-700 hover:bg-yellow-100 hover:text-yellow-700" role="menuitem">
+                  Все категории
+                </a>
+                {% for category in categories %}
+                  <a href="?category={{ category.id }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100 hover:text-yellow-700" role="menuitem">
+                    {{ category.name }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+
+        <!-- Наличие -->
+        <div class="mb-6">
+          <h3 class="font-semibold text-gray-700 mb-3">В наличии</h3>
+          <label class="flex items-center space-x-3 cursor-pointer hover:text-yellow-600 transition">
+            <input type="checkbox" name="in_stock" class="form-checkbox h-5 w-5 text-yellow-500">
+            <span>Только в наличии</span>
+          </label>
+        </div>
+
+        <!-- Цена -->
+        <div class="mb-6">
+          <h3 class="font-semibold text-gray-700 mb-3">Цена (₽)</h3>
+          <div class="flex space-x-4">
+            <input type="number" name="price_min" min="0" placeholder="Мин" class="w-24 p-2 border rounded text-gray-700" />
+            <input type="number" name="price_max" min="0" placeholder="Макс" class="w-24 p-2 border rounded text-gray-700" />
+          </div>
+        </div>
+
+        <!-- Кнопка очистки -->
+        <button id="clearFilters" class="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 rounded transition">
+          Сбросить фильтры
+        </button>
+      </aside>
+
+      <!-- Карточки -->
+      <main class="flex-1">
+        <div id="flower-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {% for flower in flowers %}
+            <a href="{% url 'flower_detail' flower.pk %}" class="block-cart hover:opacity-90 transition-all"
+               data-name="{{ flower.name|lower }}"
+               data-description="{{ flower.description|default_if_none:''|lower }}"
+               data-price="{{ flower.price }}"
+               data-in_stock="{{ flower.in_stock|yesno:'1,0' }}"
+            >
+              <div 
+                class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer hover:shadow-xl transition duration-300"
+              >
+                <div class="card-img-wrapper h-48 overflow-hidden">
+                  {% if flower.image %}
+                    <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="w-full h-full object-cover" />
+                  {% else %}
+                    <div class="flex items-center justify-center bg-gray-200 text-gray-500 h-full rounded-t-3xl">Нет изображения</div>
+                  {% endif %}
+                </div>
+                <div class="p-2 flex flex-col flex-grow">
+                  <h3 class="text-lg font-semibold mb-1">{{ flower.name }}</h3>
+                  <p class="text-gray-600 flex-grow text-sm line-clamp-2">{{ flower.description|default_if_none:"" }}</p>
+                  <div class="mt-3 flex justify-between items-center">
+                    <span class="text-yellow-600 font-bold text-base">{{ flower.price }} ₽</span>
+                    {% if flower.in_stock %}
+                      <span class="text-green-600 font-semibold text-sm">В наличии</span>
+                    {% else %}
+                      <span class="text-red-600 font-semibold text-sm">Нет в наличии</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </a>
+          {% empty %}
+            <p class="text-center text-gray-600 col-span-full">Цветов пока нет :(</p>
+          {% endfor %}
+        </div>
+      </main>
+
+    </div>
+
+  </div>
+
+  <script>
+    (() => {
+      const cardsContainer = document.getElementById('flower-cards');
+      const cards = Array.from(cardsContainer.querySelectorAll('a.block-cart'));
+
+      const searchInput = document.getElementById('search');
+      const inStockCheckbox = document.querySelector('input[name="in_stock"]');
+      const priceMinInput = document.querySelector('input[name="price_min"]');
+      const priceMaxInput = document.querySelector('input[name="price_max"]');
+      const clearButton = document.getElementById('clearFilters');
+
+      function filterCards() {
+        const searchText = searchInput.value.trim().toLowerCase();
+        const inStockOnly = inStockCheckbox.checked;
+        const priceMin = parseFloat(priceMinInput.value) || 0;
+        const priceMax = parseFloat(priceMaxInput.value) || Infinity;
+
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+          const name = card.dataset.name || "";
+          const description = card.dataset.description || "";
+          const price = parseFloat(card.dataset.price) || 0;
+          const inStock = card.dataset.in_stock === "1";
+
+          const matchesSearch = name.includes(searchText) || description.includes(searchText);
+          const matchesInStock = !inStockOnly || inStock;
+          const matchesPrice = price >= priceMin && price <= priceMax;
+
+          const isVisible = matchesSearch && matchesInStock && matchesPrice;
+
+          card.style.display = isVisible ? "" : "none";
+          if (isVisible) visibleCount++;
+        });
+
+        const existingMsg = document.getElementById('no-results');
+        if (visibleCount === 0) {
+          if (!existingMsg) {
+            const msg = document.createElement('p');
+            msg.id = 'no-results';
+            msg.className = 'text-center text-gray-600 col-span-full mt-8';
+            msg.textContent = 'Цветов по заданным фильтрам не найдено :(';
+            cardsContainer.appendChild(msg);
+          }
+        } else {
+          if (existingMsg) existingMsg.remove();
+        }
+      }
+
+      searchInput.addEventListener('input', filterCards);
+      inStockCheckbox.addEventListener('change', filterCards);
+      priceMinInput.addEventListener('input', filterCards);
+      priceMaxInput.addEventListener('input', filterCards);
+
+      clearButton.addEventListener('click', () => {
+        searchInput.value = '';
+        inStockCheckbox.checked = false;
+        priceMinInput.value = '';
+        priceMaxInput.value = '';
+        filterCards();
+      });
+
+      filterCards();
+
+      // Анимация светлячков
+      const container = document.querySelector(".fireflies-container");
+      for (let i = 0; i < 20; i++) {
+        const firefly = document.createElement("div");
+        firefly.classList.add("firefly");
+        firefly.style.top = `${Math.random() * 100}%`;
+        firefly.style.left = `${Math.random() * 100}%`;
+        firefly.style.animationDuration = `${5 + Math.random() * 6}s`;
+        firefly.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(firefly);
+      }
+      
+      // Логика показа/скрытия списка категорий
+      const categoryToggleBtn = document.getElementById('categoryToggleBtn');
+      const categoryList = document.getElementById('categoryList');
+
+      categoryToggleBtn.addEventListener('click', () => {
+        categoryList.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!categoryToggleBtn.contains(e.target) && !categoryList.contains(e.target)) {
+          categoryList.classList.add('hidden');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
