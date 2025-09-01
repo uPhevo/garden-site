@@ -1,16 +1,14 @@
-# garden_site/settings.py
 import os
 import re
 from pathlib import Path
 from dotenv import load_dotenv
+from whitenoise import WhiteNoise
 
 # load .env (nano.env)
-_here = Path(__file__).resolve().parent.parent
-load_dotenv(_here / "nano.env")
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / "nano.env")
 
-BASE_DIR = _here
-
-# секрет
+# Секретный ключ
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
 # DEBUG parsing
@@ -20,27 +18,24 @@ DEBUG = str(_DEBUG_RAW).strip().lower() in ("1", "true", "yes", "on")
 # ALLOWED_HOSTS parsing (CSV, пробелы, скобки)
 _raw_hosts = os.getenv("ALLOWED_HOSTS", "")
 if _raw_hosts:
-    # убрать скобки и кавычки и разделить
     clean = re.sub(r"^[\[\(]+|[\]\)]+$", "", _raw_hosts).strip()
     ALLOWED_HOSTS = [h.strip() for h in re.split(r"[,\s]+", clean) if h.strip()]
 else:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS = []
 
-# для удобства при локальном тесте можно добавить 0.0.0.0
-if DEBUG and "0.0.0.0" not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS += ["0.0.0.0"]
+# Добавляем явно домен Timeweb и IP сервера
+ALLOWED_HOSTS += [
+    "uphevo-garden-site-e87c.twc1.net",
+    "www.uphevo-garden-site-e87c.twc1.net",
+    "188.225.37.139",
+]
 
-# CSRF trusted origins (если используешь HTTPS через прокси)
-CSRF_TRUSTED_ORIGINS = []
-for host in ALLOWED_HOSTS:
-    if host and host != "*" and host not in ("127.0.0.1", "localhost", "0.0.0.0"):
-        host_only = host.split(":")[0]
-        CSRF_TRUSTED_ORIGINS.append(f"https://{host_only}")
-        # если нужен http версия, можно раскомментировать
-        # CSRF_TRUSTED_ORIGINS.append(f"http://{host_only}")
+# Для локального теста можно оставить 127.0.0.1 и localhost
+if DEBUG:
+    ALLOWED_HOSTS += ["127.0.0.1", "localhost", "0.0.0.0"]
 
-# если сайт за reverse-proxy с X-Forwarded-Proto:
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host not in ("127.0.0.1", "localhost", "0.0.0.0")]
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -69,15 +64,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # WhiteNoise для статики
 ]
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 ROOT_URLCONF = "garden_site.urls"
 
@@ -99,17 +91,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "garden_site.wsgi.application"
 
-# DATABASE: если есть DATABASE_URL — используем dj_database_url, иначе sqlite
+# DATABASE
 db_url = os.getenv("DATABASE_URL", "")
 if db_url:
     try:
         import dj_database_url
         DATABASES = {"default": dj_database_url.parse(db_url, conn_max_age=600, ssl_require=not DEBUG)}
     except Exception:
-        # fallback sqlite (если dj_database_url не установлен)
-        DATABASES = {
-            "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
-        }
+        DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
 else:
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
 
@@ -120,6 +109,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"  # обязательно для collectstatic
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"  # WhiteNoise storage
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -136,13 +126,3 @@ CSRF_COOKIE_SECURE = False if DEBUG else True
 SESSION_COOKIE_SECURE = False if DEBUG else True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# простой logging — ошибок в файл
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "file": {"class": "logging.FileHandler", "filename": BASE_DIR / "django_errors.log", "encoding": "utf-8"},
-    },
-    "loggers": {"django": {"handlers": ["file"], "level": "ERROR", "propagate": True}},
-}
