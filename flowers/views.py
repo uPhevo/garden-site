@@ -1,13 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
+from asgiref.sync import sync_to_async
 import json
 
 
+# --- Страницы ---
 def contacts_view(request):
     contacts = Contacts.objects.first()
     return render(request, "main/contacts.html", {"contacts": contacts})
@@ -106,9 +108,10 @@ def catalog_data(request):
     return JsonResponse({'flowers': data})
 
 
+# --- Асинхронная отправка почты для консультации ---
 @csrf_exempt
 @require_POST
-def submit_consultation(request):
+async def submit_consultation(request):
     name = request.POST.get('name')
     phone = request.POST.get('phone')
     mail = request.POST.get('mail')
@@ -120,7 +123,7 @@ def submit_consultation(request):
     email_body = f"Новая заявка на консультацию:\n\nИмя: {name}\nТелефон: {phone}\nПочта: {mail}\nСообщение:\n{message}"
 
     try:
-        send_mail(
+        await sync_to_async(send_mail)(
             subject="📝 Запрос на консультацию — Сказочный сад",
             message=email_body,
             from_email="skazochniysad@mail.ru",
@@ -132,6 +135,7 @@ def submit_consultation(request):
         return JsonResponse({'success': False, 'error': str(e)})
 
 
+# --- Корзина ---
 def get_cart_items(request):
     cart = request.session.get('cart', {})
     flowers = Flower.objects.filter(id__in=cart.keys())
@@ -172,8 +176,9 @@ def flower_detail(request, pk):
     return render(request, 'flowers/detail.html', {'flower': flower, 'cart_ids': cart_ids})
 
 
+# --- Асинхронная отправка почты для заказа ---
 @require_POST
-def submit_order(request):
+async def submit_order(request):
     name = request.POST.get('name')
     email = request.POST.get('email')
     phone = request.POST.get('phone')
@@ -197,7 +202,7 @@ def submit_order(request):
     message += f"\nИтого: {total} ₽"
 
     try:
-        send_mail(
+        await sync_to_async(send_mail)(
             subject="🌸 Новый заказ — Сказочный сад",
             message=message,
             from_email="skazochniysad@mail.ru",
@@ -212,6 +217,7 @@ def submit_order(request):
         return JsonResponse({'success': False, 'error': f'Ошибка при отправке: {e}'})
 
 
+# --- Очистка и управление корзиной ---
 @require_POST
 def clear_cart(request):
     if 'cart' in request.session:
