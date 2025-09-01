@@ -1,32 +1,36 @@
+# views.py
+import json
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import send_mail
 from flowers.models import Flower, Category, WorkCondition, About, Contacts
-from django.db import models
 from asgiref.sync import sync_to_async
-import json
+from django.core.mail import send_mail
 
-
-# --- Страницы ---
-def contacts_view(request):
-    contacts = Contacts.objects.first()
+# -----------------------------
+# Основные страницы
+# -----------------------------
+async def contacts_view(request):
+    contacts = await sync_to_async(lambda: Contacts.objects.first())()
     return render(request, "main/contacts.html", {"contacts": contacts})
 
 
-def about_view(request):
-    about = About.objects.first()
+async def about_view(request):
+    about = await sync_to_async(lambda: About.objects.first())()
     return render(request, "about.html", {"about": about})
 
 
-def personals(request):
-    conditions = WorkCondition.objects.first()
+async def personals(request):
+    conditions = await sync_to_async(lambda: WorkCondition.objects.first())()
     return render(request, "main/personals.html", {"conditions": conditions})
 
 
-def catalog(request):
-    categories = Category.objects.all()
+# -----------------------------
+# Каталог цветов
+# -----------------------------
+async def catalog(request):
+    categories = await sync_to_async(lambda: list(Category.objects.all()))()
     search_text = request.GET.get('search', '').strip()
     selected_in_stock = request.GET.get('in_stock') == 'on'
     price_min = request.GET.get('price_min')
@@ -34,24 +38,24 @@ def catalog(request):
     selected_sort = request.GET.get('sort_by')
     category_id = request.GET.get('category')
 
-    flowers = Flower.objects.all()
+    flowers_qs = Flower.objects.all()
 
     if category_id and category_id.isdigit():
-        flowers = flowers.filter(category_id=category_id)
+        flowers_qs = flowers_qs.filter(category_id=category_id)
 
     if search_text:
-        flowers = flowers.filter(
+        flowers_qs = flowers_qs.filter(
             models.Q(name__icontains=search_text) | models.Q(description__icontains=search_text)
         )
 
     if selected_in_stock:
-        flowers = flowers.filter(in_stock=True)
+        flowers_qs = flowers_qs.filter(in_stock=True)
 
     try:
         if price_min:
-            flowers = flowers.filter(price__gte=float(price_min))
+            flowers_qs = flowers_qs.filter(price__gte=float(price_min))
         if price_max:
-            flowers = flowers.filter(price__lte=float(price_max))
+            flowers_qs = flowers_qs.filter(price__lte=float(price_max))
     except ValueError:
         pass
 
@@ -62,7 +66,9 @@ def catalog(request):
         'price_desc': '-price',
     }
     if selected_sort in sort_mapping:
-        flowers = flowers.order_by(sort_mapping[selected_sort])
+        flowers_qs = flowers_qs.order_by(sort_mapping[selected_sort])
+
+    flowers = await sync_to_async(lambda: list(flowers_qs))()
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = [
@@ -90,25 +96,9 @@ def catalog(request):
     return render(request, 'main/catalog.html', context)
 
 
-def catalog_data(request):
-    category_id = request.GET.get('category')
-    flowers = Flower.objects.all()
-    if category_id and category_id.isdigit():
-        flowers = flowers.filter(category_id=category_id)
-
-    data = [
-        {
-            'id': f.id,
-            'name': f.name,
-            'price': str(f.price),
-            'image': f.image.url if f.image else '',
-        }
-        for f in flowers
-    ]
-    return JsonResponse({'flowers': data})
-
-
-# --- Асинхронная отправка почты для консультации ---
+# -----------------------------
+# Консультации
+# -----------------------------
 @csrf_exempt
 @require_POST
 async def submit_consultation(request):
@@ -135,7 +125,9 @@ async def submit_consultation(request):
         return JsonResponse({'success': False, 'error': str(e)})
 
 
-# --- Корзина ---
+# -----------------------------
+# Корзина
+# -----------------------------
 def get_cart_items(request):
     cart = request.session.get('cart', {})
     flowers = Flower.objects.filter(id__in=cart.keys())
@@ -176,7 +168,6 @@ def flower_detail(request, pk):
     return render(request, 'flowers/detail.html', {'flower': flower, 'cart_ids': cart_ids})
 
 
-# --- Асинхронная отправка почты для заказа ---
 @require_POST
 async def submit_order(request):
     name = request.POST.get('name')
@@ -191,7 +182,7 @@ async def submit_order(request):
     if not cart:
         return JsonResponse({'success': False, 'error': 'Корзина пуста.'})
 
-    flowers = Flower.objects.filter(id__in=cart.keys())
+    flowers = await sync_to_async(lambda: list(Flower.objects.filter(id__in=cart.keys())))()
     total = 0
     message = f"Новый заказ от {name}\nEmail: {email}\nТелефон: {phone}\nДоставка: {delivery}\n\nЗаказ:\n"
     for flower in flowers:
@@ -209,7 +200,6 @@ async def submit_order(request):
             recipient_list=["skazochniysad@mail.ru"],
             fail_silently=False,
         )
-        # очищаем корзину
         request.session['cart'] = {}
         request.session.modified = True
         return JsonResponse({'success': True, 'message': 'Заказ отправлен! Спасибо! 😊'})
@@ -217,7 +207,6 @@ async def submit_order(request):
         return JsonResponse({'success': False, 'error': f'Ошибка при отправке: {e}'})
 
 
-# --- Очистка и управление корзиной ---
 @require_POST
 def clear_cart(request):
     if 'cart' in request.session:
