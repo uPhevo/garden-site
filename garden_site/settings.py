@@ -14,7 +14,7 @@ BASE_DIR = _here
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
 
 # DEBUG parsing
-_DEBUG_RAW = os.getenv("DEBUG", "True")
+_DEBUG_RAW = os.getenv("DEBUG", "False")
 DEBUG = str(_DEBUG_RAW).strip().lower() in ("1", "true", "yes", "on")
 
 # ALLOWED_HOSTS parsing (CSV, пробелы, скобки)

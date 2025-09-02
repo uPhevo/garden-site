@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from asgiref.sync import sync_to_async
 from django.core.mail import send_mail
+from django.db import models
 
 # -----------------------------
 # Основные страницы
@@ -94,6 +95,10 @@ async def catalog(request):
         'selected_category': category_id or '',
     }
     return render(request, 'main/catalog.html', context)
+
+
+# Создаём alias для совместимости с импортом
+catalog_data = catalog  # чтобы main/urls.py не ломался
 
 
 # -----------------------------
