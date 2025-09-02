@@ -131,9 +131,9 @@ USE_I18N = True
 USE_TZ = True
 
 # безопасность (в debug отключаем редиректы)
-SECURE_SSL_REDIRECT = False if DEBUG else True
-CSRF_COOKIE_SECURE = False if DEBUG else True
-SESSION_COOKIE_SECURE = False if DEBUG else True
+SECURE_SSL_REDIRECT = False 
+CSRF_COOKIE_SECURE = False 
+SESSION_COOKIE_SECURE = False
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
