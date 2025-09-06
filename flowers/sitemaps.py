@@ -1,11 +1,10 @@
-# flowers/sitemaps.py
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Flower  # или твоя модель товаров
+from .models import Flower
 
 class StaticViewSitemap(Sitemap):
-    priority = 0.5
-    changefreq = 'weekly'
+    changefreq = "weekly"
+    priority = 0.8
 
     def items(self):
         return ['home', 'catalog', 'about', 'contacts', 'personals']
@@ -14,11 +13,12 @@ class StaticViewSitemap(Sitemap):
         return reverse(item)
 
 class FlowerSitemap(Sitemap):
+    changefreq = "daily"
     priority = 0.7
-    changefreq = 'daily'
 
     def items(self):
         return Flower.objects.all()
 
-    def location(self, obj):
-        return obj.get_absolute_url()
+    # теперь location можно оставить по умолчанию, т.к. get_absolute_url есть
+    # def location(self, obj):
+    #     return obj.get_absolute_url()
