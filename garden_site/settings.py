@@ -32,12 +32,17 @@ else:
 if DEBUG and "0.0.0.0" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS += ["0.0.0.0"]
 
-# CSRF trusted origins (HTTP, т.к. нет SSL)
+# Сформировать CSRF_TRUSTED_ORIGINS из ALLOWED_HOSTS (добавляем https и http, исключая локалки)
 CSRF_TRUSTED_ORIGINS = []
 for host in ALLOWED_HOSTS:
     if host and host != "*" and host not in ("127.0.0.1", "localhost", "0.0.0.0"):
-        host_only = host.split(":")[0]
-        CSRF_TRUSTED_ORIGINS.append(f"http://{host_only}")  # HTTP для TimeWeb
+        host_only = host.split(":")[0]  # если есть порт — убираем
+        CSRF_TRUSTED_ORIGINS.append(f"https://{host_only}")
+        CSRF_TRUSTED_ORIGINS.append(f"http://{host_only}")
+
+# убрать дубликаты и пустые строки
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([h for h in CSRF_TRUSTED_ORIGINS if h]))
+
 
 # если сайт за reverse-proxy с X-Forwarded-Proto:
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -130,9 +135,9 @@ USE_I18N = True
 USE_TZ = True
 
 # безопасность (в debug отключаем редиректы)
-SECURE_SSL_REDIRECT = False
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
