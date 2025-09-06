@@ -114,6 +114,15 @@
       form#consultation-form textarea,
       form#consultation-form button { font-size: 0.9rem; }
     }
+
+    /* Дополнительные мелкие стили для карточек и текста */
+    .drop-shadow-lg { text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+    .drop-shadow-md { text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+    .text-white { color: #fff; }
+    .bg-yellow-600 { background-color: #d97706; }
+    .bg-yellow-500 { background-color: #f59e0b; }
+    .hover\:bg-yellow-700:hover { background-color: #b45309; }
+    .hover\:text-yellow-600:hover { color: #d97706; }
   </style>
 </head>
 <body class="text-gray-900">
@@ -152,37 +161,34 @@
   </section>
 
   <!-- Catalog -->
-<section id="catalog" class="py-0">
-  <div class="max-w-4xl mx-auto px-4">
-    <h2 class="text-2xl font-bold text-center mb-8 text-white drop-shadow-md">
-      Популярные цветы
-    </h2>
-    <div class="grid gap-8 grid-cols-1 md:grid-cols-3">
-      <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/фуксия.jpg'); filter: brightness(0.8);"></div>
-        <div class="relative p-4 text-white flex flex-col justify-end h-full">
-          <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Фуксия</h3>
-          <p class="text-sm drop-shadow-md">Идеальна для подвесных кашпо и оживления тенистых уголков.</p>
+  <section id="catalog" class="py-0">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center mb-8 text-white drop-shadow-md">Популярные цветы</h2>
+      <div class="grid gap-8 grid-cols-1 md:grid-cols-3">
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/фуксия.jpg'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Фуксия</h3>
+            <p class="text-sm drop-shadow-md">Идеальна для подвесных кашпо и оживления тенистых уголков.</p>
+          </div>
         </div>
-      </div>
-      <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/бегония.jpg'); filter: brightness(0.8);"></div>
-        <div class="relative p-4 text-white flex flex-col justify-end h-full">
-          <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Бегония</h3>
-          <p class="text-sm drop-shadow-md">Пышное цветение и разнообразие оттенков для вашего сада.</p>
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/бегония.jpg'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Бегония</h3>
+            <p class="text-sm drop-shadow-md">Пышное цветение и разнообразие оттенков для вашего сада.</p>
+          </div>
         </div>
-      </div>
-      <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/горт.jpg'); filter: brightness(0.8);"></div>
-        <div class="relative p-4 text-white flex flex-col justify-end h-full">
-          <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Гортензия</h3>
-          <p class="text-sm drop-shadow-md">Настоящая королева сада — воздушная, элегантная, сказочная.</p>
+        <div class="rounded-xl shadow-md overflow-hidden relative h-40 md:h-56">
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('static/images/горт.jpg'); filter: brightness(0.8);"></div>
+          <div class="relative p-4 text-white flex flex-col justify-end h-full">
+            <h3 class="text-lg font-semibold mb-1 drop-shadow-md">Гортензия</h3>
+            <p class="text-sm drop-shadow-md">Настоящая королева сада — воздушная, элегантная, сказочная.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- About -->
   <section id="about" class="py-24 text-center bg-yellow-500">
@@ -247,7 +253,7 @@
   // AJAX отправка формы консультации
   const form = document.getElementById('consultation-form');
   form.addEventListener('submit', function(e) {
-    e.preventDefault(); // отменяем стандартное поведение
+    e.preventDefault();
     const data = new FormData(form);
 
     fetch(form.action, {
@@ -274,7 +280,6 @@
     });
   });
 </script>
-
 
 </body>
 </html>
