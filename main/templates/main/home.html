@@ -9,195 +9,112 @@
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
-body {
-  font-family: 'Helvetica Neue', sans-serif;
-}
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+    }
 
-/* Новый фон только для Hero */
-.hero-block {
-  border-radius: 1.5rem;
-  overflow: hidden;
-  position: relative;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
+    /* Новый фон только для Hero */
+    .hero-block {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      position: relative;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0) 15%, white 100%),
-              url(/static/images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg);
-  background-size: cover;
-  background-position: center;
-  filter: brightness(100%);
-  animation: slowZoom 60s infinite alternate linear;
-  z-index: 0;
-}
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 15%, white 100%),
+                  url(/static/images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg);
+      background-size: cover;
+      background-position: center;
+      filter: brightness(100%);
+      animation: slowZoom 60s infinite alternate linear;
+      z-index: 0;
+    }
 
-@keyframes slowZoom {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
-}
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
 
-#about {
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  border-radius: 40px;
-  max-width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1rem;
-  box-sizing: border-box;
-  background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
-  color: #ffffffd8;
-  box-shadow: 5px 5px 10px rgba(0,0,0,0.5)
-}
+    #about {
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+      border-radius: 40px;
+      max-width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem;
+      box-sizing: border-box;
+      background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
+      color: #ffffffd8;
+      box-shadow: 5px 5px 10px rgba(0,0,0,0.5)
+    }
 
-#catalog {
-  margin-top: -19px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  box-sizing: border-box;
-}
+    #catalog {
+      margin-top: -19px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      box-sizing: border-box;
+    }
 
-.fireflies-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  overflow: hidden;
-}
+    .fireflies-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
 
-.firefly {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.2) 80%);
-  border-radius: 50%;
-  box-shadow: 0 0 12px gold;
-  opacity: 0.8;
-  animation: moveFirefly linear infinite;
-}
+    .firefly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.2) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 12px gold;
+      opacity: 0.8;
+      animation: moveFirefly linear infinite;
+    }
 
-@keyframes moveFirefly {
-  0% { transform: translate3d(0, 0, 0); opacity: 0.6; }
-  50% { transform: translate3d(40px, -60px, 0); opacity: 1; }
-  100% { transform: translate3d(-30px, 60px, 0); opacity: 0.5; }
-}
+    @keyframes moveFirefly {
+      0% { transform: translate3d(0, 0, 0); opacity: 0.6; }
+      50% { transform: translate3d(40px, -60px, 0); opacity: 1; }
+      100% { transform: translate3d(-30px, 60px, 0); opacity: 0.5; }
+    }
 
-nav { flex-wrap: wrap; }
-nav a { white-space: nowrap; }
+    nav { flex-wrap: wrap; }
+    nav a { white-space: nowrap; }
 
-h1 { font-size: 1.75rem; }
-@media (min-width: 768px) { h1 { font-size: 3.75rem; } }
+    h1 { font-size: 1.75rem; }
+    @media (min-width: 768px) { h1 { font-size: 3.75rem; } }
 
-p { font-size: 1rem; }
-@media (min-width: 768px) { p { font-size: 1.25rem; } }
+    p { font-size: 1rem; }
+    @media (min-width: 768px) { p { font-size: 1.25rem; } }
 
-.rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 16rem; }
-@media (max-width: 767px) { .rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 12rem; } }
+    .rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 16rem; }
+    @media (max-width: 767px) { .rounded-2xl.shadow-md.overflow-hidden.relative.h-64 { height: 12rem; } }
 
-section.py-16 { padding-top: 4rem; padding-bottom: 4rem; }
-@media (max-width: 767px) { section.py-16 { padding-top: 2rem; padding-bottom: 2rem; } }
+    section.py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+    @media (max-width: 767px) { section.py-16 { padding-top: 2rem; padding-bottom: 2rem; } }
 
-section.py-20 { padding-top: 5rem; padding-bottom: 5rem; }
-@media (max-width: 767px) { section.py-20 { padding-top: 3rem; padding-bottom: 3rem; } }
+    section.py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+    @media (max-width: 767px) { section.py-20 { padding-top: 3rem; padding-bottom: 3rem; } }
 
-form#consultation-form input,
-form#consultation-form textarea,
-form#consultation-form button { font-size: 1rem; }
-@media (max-width: 480px) {
-  form#consultation-form input,
-  form#consultation-form textarea,
-  form#consultation-form button { font-size: 0.9rem; }
-}
-
-/* --- Мобильные корректировки --- */
-@media (max-width: 767px) {
-  /* Hero block */
-  .hero-block {
-    margin-top: 2rem;
-    max-width: 95%;
-  }
-
-  .hero-block h1 {
-    font-size: 2rem;
-  }
-
-  .hero-block p {
-    font-size: 1rem;
-    padding: 0 1rem;
-  }
-
-  /* Catalog: карточки на одну колонку */
-  #catalog .grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  #catalog .rounded-xl {
-    height: 12rem;
-  }
-
-  /* About section padding */
-  #about {
-    padding: 2rem 1rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  /* Order Form padding и input/textarea font-size */
-  #order {
-    padding: 3rem 1rem;
-  }
-
-  form#consultation-form input,
-  form#consultation-form textarea,
-  form#consultation-form button {
-    font-size: 0.9rem;
-    padding: 0.8rem 1rem;
-  }
-
-  /* Header: навигация становится вертикальной */
-  header nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-top: 4rem;
-  }
-
-  header nav a, header nav .bg-yellow-500 {
-    height: auto;
-    padding: 0.5rem 1rem;
-  }
-
-  /* Hero button */
-  .hero-block a {
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-block h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero-block p {
-    font-size: 0.95rem;
-  }
-
-  form#consultation-form input,
-  form#consultation-form textarea,
-  form#consultation-form button {
-    font-size: 0.85rem;
-  }
-}
-
+    form#consultation-form input,
+    form#consultation-form textarea,
+    form#consultation-form button { font-size: 1rem; }
+    @media (max-width: 480px) {
+      form#consultation-form input,
+      form#consultation-form textarea,
+      form#consultation-form button { font-size: 0.9rem; }
+    }
   </style>
 </head>
 <body class="text-gray-900">
@@ -206,23 +123,58 @@ form#consultation-form button { font-size: 1rem; }
   <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80"></div>
 
   <!-- Header -->
-  <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
-    <div class="fireflies-container"></div>
-    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
-      <div class="absolute -top-2">
-        <a href="{% url 'home' %}">
-          <img src="/static/images/logo.png" alt="Логотип" class="h-24 object-contain" />
-        </a>
-      </div>
-      <nav class="ml-auto flex items-center h-full space-x-4 md:space-x-6 text-base text-black">
-        <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
-        <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
-        <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
-        <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
-        <a href="{% url 'cart_view' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">🛒 Корзина</a>
-      </nav>
+<!-- =========== HEADER (заменить старый) =========== -->
+<header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+  <div class="fireflies-container"></div>
+  <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+
+    <!-- Логотип -->
+    <div class="absolute -top-2">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="Логотип" class="h-24 object-contain" />
+      </a>
     </div>
-  </header>
+
+    <!-- Десктопная навигация -->
+    <nav class="hidden md:flex ml-auto items-center h-full space-x-4 md:space-x-6 text-base text-black">
+      <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
+      <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
+      <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
+      <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+    </nav>
+
+    <!-- Мобильные элементы: бургер + корзина -->
+    <div class="flex items-center ml-auto md:ml-0 space-x-2">
+      <!-- Бургер меню для mobile (согласованный id) -->
+      <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden focus:outline-none p-1" title="Меню">
+        <!-- SVG: квадрат с закруглениями и белыми полосками -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 40 40" fill="none" class="text-yellow-500 hover:text-yellow-600" role="img" aria-hidden="true">
+          <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="currentColor" />
+          <rect x="10" y="12" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="18.5" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="25" width="20" height="3" rx="1.5" fill="white"/>
+        </svg>
+      </button>
+
+      <!-- Кнопка корзины (всегда справа и не двигается) -->
+      <a href="{% url 'cart_view' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">
+        🛒 Корзина
+      </a>
+    </div>
+  </div>
+
+  <!-- Мобильное меню (скрыто по умолчанию) -->
+  <div id="mobile-menu"
+      class="hidden absolute top-16 right-4 w-44 bg-white rounded-xl shadow-lg z-50 ring-1 ring-black/5 overflow-hidden"
+      role="menu" aria-hidden="true">
+    <nav class="flex flex-col" role="none">
+      <a role="menuitem" href="{% url 'catalog' %}"   class="block px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Каталог</a>
+      <a role="menuitem" href="{% url 'about' %}"     class="block px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">О нас</a>
+      <a role="menuitem" href="{% url 'contacts' %}"  class="block px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Связь</a>
+      <a role="menuitem" href="{% url 'personals' %}" class="block px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition">Условия работы</a>
+    </nav>
+  </div>
+</header>
 
   <!-- Hero Section с фоном -->
   <section class="hero-block mt-8">
@@ -298,6 +250,44 @@ form#consultation-form button { font-size: 1rem; }
   </footer>
 
 <script>
+(function () {
+    const menuButton = document.getElementById('mobile-menu-button'); // твой бургер
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!menuButton || !mobileMenu) return;
+
+    // Показ/скрытие меню
+    menuButton.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      mobileMenu.setAttribute('aria-hidden', String(isHidden));
+      menuButton.setAttribute('aria-expanded', String(!isHidden));
+    });
+
+    // Если клик внутри меню — не закрываем
+    mobileMenu.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+    });
+
+    // Закрытие при клике вне меню
+    document.addEventListener('click', function () {
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Закрытие по Esc
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
   // Fireflies
   const container = document.querySelectorAll(".fireflies-container");
   container.forEach(cont => {

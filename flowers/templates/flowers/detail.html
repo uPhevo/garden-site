@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru" class="scroll-smooth">
 <head>
@@ -5,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ flower.name }} — Сказочный сад</title>
   <link rel="icon" href="{% static 'images/mini-logo.png' %}" type="image/png">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .block {
       min-height: 785px;
@@ -28,11 +29,10 @@
       z-index: -1;
       border-radius: inherit;
       image-rendering: auto;
-
-      /* Плавный переход внизу */
       mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     }
+
     .fireflies-container {
       position: absolute;
       width: 100%;
@@ -57,92 +57,175 @@
       50% { transform: translate3d(40px,-60px,0); opacity: 1; }
       100% { transform: translate3d(-30px,60px,0); opacity: 0.5; }
     }
-    .product-img img {
-      border-radius: 1rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      max-width: 100%;
-      object-fit: cover;
+
+    /* Кнопка назад */
+    .back-btn {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 20;
+      background-color: #f59e0b;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .back-btn:hover {
+      background-color: #d97706;
+      transform: translateX(-4px);
+      box-shadow: 0 8px 15px rgba(217, 119, 6, 0.4);
+    }
+    @media (max-width: 768px) {
+      .back-btn {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.25rem 0.7rem;
+        font-size: 1rem;
+      }
     }
 
-    /* Кнопка Назад */
-.back-btn {
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  position: sticky;
-  top: 90px; /* чуть ниже, чем шапка */
-  left: 6.5rem; /* сдвиг вправо */
-  z-index: 50;
-  display: inline-flex;
-  align-items: center;
-  background-color: #f59e0b; /* желтый */
-  color: white;
-  font-weight: 600;
-  font-size: 0.875rem; /* text-sm */
-  padding: 0.5rem 1.5rem;
-  border-radius: 9999px; /* rounded-full */
-  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
-  gap: 0.5rem;
-  max-width: max-content;
-  user-select: none;
-  cursor: pointer;
-  text-decoration: none;
-}
-.back-btn:hover {
-  background-color: #d97706; /* чуть темнее желтого */
-  transform: translateX(-4px);
-  box-shadow: 0 8px 15px rgba(217, 119, 6, 0.4);
-}
+    /* Контейнер фото */
+    .photo-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      background-color: #f3f4f6;
+      aspect-ratio: 1 / 1; /* десктоп квадрат */
+    }
+    .photo-container .photo-aspect {
+      display: block;
+      width: 100%;
+      padding-top: 100%; /* fallback 1:1 */
+      position: relative;
+    }
+    .photo-container img,
+    .photo-container .no-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 1rem;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .photo-container {
+        aspect-ratio: 3 / 2;
+      }
+      .photo-container .photo-aspect {
+        padding-top: 66.6667%; /* fallback 3:2 */
+      }
+    }
+
+    .header-cart-btn {
+      background-color: #f59e0b; /* #f59e0b = bg-yellow-500 */
+    }
+    .header-cart-btn:hover {
+      background-color: #d97706; /* bg-yellow-600 */
+    }
+
+    #mobile-menu-button svg rect:first-child {
+    fill: #f59e0b; /* точно такой же оранжевый, как на каталоге */
+    }
+
   </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-900 font-sans">
   <div class="block">
+    <!-- Header -->
     <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
       <div class="fireflies-container"></div>
       <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+        <!-- Логотип -->
         <div class="absolute -top-2">
           <a href="{% url 'home' %}">
-            <img src="/static/images/logo.png" alt="Логотип" class="h-24 object-contain" />
+            <img src="{% static 'images/logo.png' %}" alt="Логотип" class="h-24 object-contain" />
           </a>
         </div>
-        <nav class="ml-auto hidden md:flex items-center h-full space-x-6 text-base text-black">
+        <!-- Десктопная навигация -->
+        <nav class="hidden md:flex ml-auto items-center h-full space-x-4 md:space-x-6 text-base text-black">
           <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
           <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
           <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
-          <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">
-            Условия работы
+          <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+        </nav>
+        <!-- Мобильные элементы -->
+        <div class="flex items-center ml-auto md:ml-0 space-x-2">
+          <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden focus:outline-none p-1" title="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 40 40" fill="none" class="text-yellow-500 hover:text-yellow-600" role="img" aria-hidden="true">
+              <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="currentColor" />
+              <rect x="10" y="12" width="20" height="3" rx="1.5" fill="white"/>
+              <rect x="10" y="18.5" width="20" height="3" rx="1.5" fill="white"/>
+              <rect x="10" y="25" width="20" height="3" rx="1.5" fill="white"/>
+            </svg>
+          </button>
+          <a href="{% url 'cart_view' %}" 
+            class="header-cart-btn text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">
+            🛒 Корзина
           </a>
-          <a href="{% url 'cart_view' %}" class="bg-yellow-600 hover:bg-yellow-500 text-white font-semibold text-sm px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">🛒 Корзина</a>
+
+        </div>
+      </div>
+      <!-- Мобильное меню -->
+      <div id="mobile-menu" class="hidden absolute top-16 right-4 w-44 bg-white rounded-xl shadow-lg z-50 ring-1 ring-black/5 overflow-hidden" role="menu" aria-hidden="true">
+        <nav class="flex flex-col" role="none">
+          <a role="menuitem" href="{% url 'catalog' %}" class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Каталог</a>
+          <a role="menuitem" href="{% url 'about' %}" class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">О нас</a>
+          <a role="menuitem" href="{% url 'contacts' %}" class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Связь</a>
+          <a role="menuitem" href="{% url 'personals' %}" class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition">Условия работы</a>
         </nav>
       </div>
     </header>
 
-    <!-- Кнопка "Назад" -->
-    <a href="{% url 'catalog' %}" class="back-btn text-center" aria-label="Вернуться в каталог">
-      <span>Назад</span>
-    </a>
-
     <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80 pointer-events-none"></div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16 flex flex-col lg:flex-row gap-8 relative z-10 text-gray-900">
-      <div class="w-full lg:w-1/2 h-[300px] sm:h-[400px] md:h-[500px]">
-        {% if flower.image %}
-          <div class="w-full h-full overflow-hidden rounded-2xl shadow-lg">
-            <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="w-full h-full object-cover object-center" />
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-16 flex flex-col lg:flex-row gap-8 relative z-10 text-gray-900">
+      <!-- Фото -->
+      <div class="w-full lg:w-1/2 flex justify-center">
+        <div class="photo-container">
+          <div class="photo-aspect">
+            {% if flower.image %}
+              <img src="{{ flower.image.url }}" alt="{{ flower.name }}" />
+            {% else %}
+              <div class="no-image flex items-center justify-center text-gray-400 text-lg">
+                Нет изображения
+              </div>
+            {% endif %}
           </div>
-        {% else %}
-          <div class="w-full h-full bg-gray-200 rounded-xl flex items-center justify-center text-gray-400 text-lg">Нет изображения</div>
-        {% endif %}
+          <a href="{% url 'catalog' %}" class="back-btn" aria-label="Вернуться в каталог">
+            <span>Назад</span>
+          </a>
+        </div>
       </div>
-      <div class="w-full lg:w-1/2">
-        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col justify-center">
-          <div class="product-details space-y-6">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900">{{ flower.name }}</h1>
-            <p class="text-base sm:text-lg text-gray-700 leading-relaxed">{{ flower.description }}</p>
-            <div class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{{ flower.price }} ₽</div>
+
+      <!-- Описание -->
+      <div class="w-full lg:w-1/2 flex justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 flex flex-col justify-center w-full">
+          <div class="product-details space-y-4 sm:space-y-6">
+            <h1 class="text-xl sm:text-2xl md:text-4xl font-extrabold text-gray-900">{{ flower.name }}</h1>
+            <p class="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">{{ flower.description }}</p>
+            <div class="text-lg sm:text-xl md:text-3xl font-bold text-gray-900">{{ flower.price }} ₽</div>
             <form id="cart-form-{{ flower.id }}" class="flex flex-col space-y-3 max-w-xs">
               {% csrf_token %}
-              <label for="quantity-input-{{ flower.id }}" class="font-semibold text-gray-900">Количество:</label>
-              <input id="quantity-input-{{ flower.id }}" name="quantity" type="number" min="1" value="1" class="p-2 border rounded text-gray-900 w-20" {% if flower.id in cart_ids %} disabled {% endif %}/>
-              <button type="button" id="add-btn-{{ flower.id }}" class="{% if flower.id in cart_ids %}bg-gray-400{% else %}bg-yellow-600 hover:bg-yellow-700{% endif %} text-white py-3 rounded-lg font-semibold w-full transition" onclick="toggleCart({{ flower.id }})">
+              <label for="quantity-input-{{ flower.id }}" class="font-semibold text-gray-900 text-sm sm:text-base">Количество:</label>
+              <input id="quantity-input-{{ flower.id }}" name="quantity" type="number" min="1" value="1"
+                     class="p-2 border rounded text-gray-900 w-20 text-sm sm:text-base"
+                     {% if flower.id in cart_ids %} disabled {% endif %}/>
+              <button type="button" id="add-btn-{{ flower.id }}"
+                      class="{% if flower.id in cart_ids %}bg-gray-400{% else %}bg-yellow-600 hover:bg-yellow-700{% endif %}
+                             text-white py-2 sm:py-3 rounded-lg font-semibold w-full transition text-sm sm:text-base"
+                      onclick="toggleCart({{ flower.id }})">
                 {% if flower.id in cart_ids %}
                   Добавлено (убрать)
                 {% else %}
@@ -150,16 +233,49 @@
                 {% endif %}
               </button>
             </form>
-            <p class="font-semibold text-gray-700 text-xs mt-2">После добавления товара в корзину, перейдите во вкладку "Корзина" в верхней части экрана</p>
+            <p class="font-semibold text-gray-700 text-xs sm:text-sm mt-2">
+              После добавления товара в корзину, перейдите во вкладку "Корзина" в верхней части экрана
+            </p>
           </div>
         </div>
       </div>
     </main>
   </div>
+
   <footer class="bg-gray-100 mt-auto py-7 text-center text-gray-500 text-sm">
     &copy; 2025 Сказочный сад.
   </footer>
+
   <script>
+    // Mobile menu toggle
+    (function () {
+      const menuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (!menuButton || !mobileMenu) return;
+      menuButton.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        const isHidden = mobileMenu.classList.toggle('hidden');
+        mobileMenu.setAttribute('aria-hidden', String(isHidden));
+        menuButton.setAttribute('aria-expanded', String(!isHidden));
+      });
+      mobileMenu.addEventListener('click', function (ev) { ev.stopPropagation(); });
+      document.addEventListener('click', function () {
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+
+    // Fireflies animation
     (() => {
       const container = document.querySelector(".fireflies-container");
       for (let i = 0; i < 20; i++) {
@@ -172,6 +288,7 @@
         container.appendChild(firefly);
       }
     })();
+
     function getCookie(name) {
       const cookies = document.cookie.split(';');
       for (let cookie of cookies) {
@@ -181,6 +298,7 @@
       }
       return null;
     }
+
     function toggleCart(flowerId) {
       const quantityInput = document.getElementById(`quantity-input-${flowerId}`);
       const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;

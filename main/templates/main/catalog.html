@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -62,6 +63,7 @@
       border-radius: 1rem;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
+    
   </style>
 </head>
 
@@ -71,37 +73,58 @@
     <div class="background-with-gradient"></div>
 
     <!-- Header -->
-    <header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
-      <div class="fireflies-container"></div>
-      <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
-        <div class="absolute -top-2">
-          <a href="{% url 'home' %}">
-            <img src="/static/images/logo.png" alt="Логотип" class="h-24 object-contain" />
-          </a>
-        </div>
+    <!-- =========== HEADER (заменить старый) =========== -->
+<header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+  <div class="fireflies-container"></div>
+  <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
 
-        <nav class="ml-auto flex items-center h-full space-x-6 text-base text-black">
-          <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">
-            Каталог
-          </a>
-          <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">
-            О нас
-          </a>
-          <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">
-            Связь
-          </a>
-          <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">
-            Условия работы
-          </a>
-          <!-- Кнопка корзины -->
-          <a href="{% url 'cart_view' %}"
-             class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200"
-          >
-            🛒 Корзина
-          </a>
-        </nav>
-      </div>
-    </header>
+    <!-- Логотип -->
+    <div class="absolute -top-2">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="Логотип" class="h-24 object-contain" />
+      </a>
+    </div>
+
+    <!-- Десктопная навигация -->
+    <nav class="hidden md:flex ml-auto items-center h-full space-x-4 md:space-x-6 text-base text-black">
+      <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
+      <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
+      <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
+      <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+    </nav>
+
+    <!-- Мобильные элементы: бургер + корзина -->
+    <div class="flex items-center ml-auto md:ml-0 space-x-2">
+      <!-- Бургер меню для mobile (согласованный id) -->
+      <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden focus:outline-none p-1" title="Меню">
+        <!-- SVG: квадрат с закруглениями и белыми полосками -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 40 40" fill="none" class="text-yellow-500 hover:text-yellow-600" role="img" aria-hidden="true">
+          <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="currentColor" />
+          <rect x="10" y="12" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="18.5" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="25" width="20" height="3" rx="1.5" fill="white"/>
+        </svg>
+      </button>
+
+      <!-- Кнопка корзины (всегда справа и не двигается) -->
+      <a href="{% url 'cart_view' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">
+        🛒 Корзина
+      </a>
+    </div>
+  </div>
+
+  <!-- Мобильное меню (скрыто по умолчанию) -->
+  <div id="mobile-menu"
+      class="hidden absolute top-16 right-4 w-44 bg-white rounded-xl shadow-lg z-50 ring-1 ring-black/5 overflow-hidden"
+      role="menu" aria-hidden="true">
+    <nav class="flex flex-col" role="none">
+      <a role="menuitem" href="{% url 'catalog' %}"   class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Каталог</a>
+      <a role="menuitem" href="{% url 'about' %}"     class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">О нас</a>
+      <a role="menuitem" href="{% url 'contacts' %}"  class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Связь</a>
+      <a role="menuitem" href="{% url 'personals' %}" class="bloc px-4 py-3 text-sm font-medium hover:bg-yellow-50 transition">Условия работы</a>
+    </nav>
+  </div>
+</header>
 
     <!-- Градиент под header -->
     <div class="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-yellow-600 to-transparent opacity-80 pointer-events-none"></div>
@@ -110,9 +133,19 @@
 
     <!-- Основной контент: фильтр сверху на мобилках, сбоку на десктопе -->
     <div class="flex flex-col md:flex-row flex-1 max-w-7xl mx-auto px-4 pt-6 pb-10 space-y-6 md:space-y-0 md:space-x-6" style="margin-top: 30px;">
+      <!-- Мобильная кнопка фильтров -->
+      <div class="md:hidden mb-4">
+        <button id="mobileFilterBtn"
+                class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl shadow transition-all duration-300">
+          Открыть фильтр
+        </button>
+      </div>
 
+      
       <!-- Фильтр -->
-      <aside id="filters" class="w-full md:w-80 bg-white bg-opacity-90 p-6 rounded-3xl shadow-lg h-fit max-h-[calc(100vh-6rem)] overflow-y-auto z-10 sticky md:sticky top-24 md:top-24">
+      <aside id="filters" class="w-full md:w-80 bg-white bg-opacity-90 p-6 rounded-3xl shadow-lg h-fit max-h-[calc(100vh-6rem)] overflow-y-auto z-10 sticky md:sticky top-24 md:top-24
+        transition-all duration-300 ease-in-out transform md:translate-x-0 md:opacity-100 hidden md:block">
+
         <h2 class="text-2xl font-semibold mb-6 text-gray-900">Фильтры</h2>
 
         <!-- Поиск по названию и описанию -->
@@ -176,36 +209,44 @@
       <main class="flex-1">
         <div id="flower-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {% for flower in flowers %}
-            <a href="{% url 'flower_detail' flower.pk %}" class="block-cart hover:opacity-90 transition-all"
-               data-name="{{ flower.name|lower }}"
-               data-description="{{ flower.description|default_if_none:''|lower }}"
-               data-price="{{ flower.price }}"
-               data-in_stock="{{ flower.in_stock|yesno:'1,0' }}"
+          <a href="{% url 'flower_detail' flower.pk %}" class="block-cart hover:opacity-90 transition-all"
+            data-name="{{ flower.name|lower }}"
+            data-description="{{ flower.description|default_if_none:''|lower }}"
+            data-price="{{ flower.price }}"
+            data-in_stock="{{ flower.in_stock|yesno:'1,0' }}">
+            <div 
+              class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer hover:shadow-xl transition duration-300 h-full"
             >
-              <div 
-                class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer hover:shadow-xl transition duration-300"
-              >
-                <div class="card-img-wrapper h-48 overflow-hidden">
-                  {% if flower.image %}
-                    <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="w-full h-full object-cover" />
+              <!-- Изображение -->
+              <div class="card-img-wrapper h-48 w-full overflow-hidden flex-shrink-0">
+                {% if flower.image %}
+                  <img src="{{ flower.image.url }}" alt="{{ flower.name }}" class="w-full h-full object-cover" />
+                {% else %}
+                  <div class="flex items-center justify-center bg-gray-200 text-gray-500 h-full w-full rounded-t-3xl">
+                    Нет изображения
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Контент -->
+              <div class="p-2 flex flex-col flex-1">
+                <h3 class="text-lg font-semibold mb-1 line-clamp-1">{{ flower.name }}</h3>
+                <p class="text-gray-600 text-sm flex-1 line-clamp-2 min-h-[2.5rem]">
+                  {{ flower.description|default_if_none:"" }}
+                </p>
+
+                <div class="mt-3 flex justify-between items-center">
+                  <span class="text-yellow-600 font-bold text-base">{{ flower.price }} ₽</span>
+                  {% if flower.in_stock %}
+                    <span class="text-green-600 font-semibold text-sm">В наличии</span>
                   {% else %}
-                    <div class="flex items-center justify-center bg-gray-200 text-gray-500 h-full rounded-t-3xl">Нет изображения</div>
+                    <span class="text-red-600 font-semibold text-sm">Нет в наличии</span>
                   {% endif %}
                 </div>
-                <div class="p-2 flex flex-col flex-grow">
-                  <h3 class="text-lg font-semibold mb-1">{{ flower.name }}</h3>
-                  <p class="text-gray-600 flex-grow text-sm line-clamp-2">{{ flower.description|default_if_none:"" }}</p>
-                  <div class="mt-3 flex justify-between items-center">
-                    <span class="text-yellow-600 font-bold text-base">{{ flower.price }} ₽</span>
-                    {% if flower.in_stock %}
-                      <span class="text-green-600 font-semibold text-sm">В наличии</span>
-                    {% else %}
-                      <span class="text-red-600 font-semibold text-sm">Нет в наличии</span>
-                    {% endif %}
-                  </div>
-                </div>
               </div>
-            </a>
+            </div>
+          </a>
+
           {% empty %}
             <p class="text-center text-gray-600 col-span-full">Цветов пока нет :(</p>
           {% endfor %}
@@ -217,6 +258,43 @@
   </div>
 
   <script>
+    (function () {
+    const menuButton = document.getElementById('mobile-menu-button'); // твой бургер
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!menuButton || !mobileMenu) return;
+
+    // Показ/скрытие меню
+    menuButton.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      mobileMenu.setAttribute('aria-hidden', String(isHidden));
+      menuButton.setAttribute('aria-expanded', String(!isHidden));
+    });
+
+    // Если клик внутри меню — не закрываем
+    mobileMenu.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+    });
+
+    // Закрытие при клике вне меню
+    document.addEventListener('click', function () {
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Закрытие по Esc
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
     (() => {
       const cardsContainer = document.getElementById('flower-cards');
       const cards = Array.from(cardsContainer.querySelectorAll('a.block-cart'));
@@ -306,6 +384,49 @@
         }
       });
     })();
+
+    // Мобильный фильтр
+      const mobileFilterBtn = document.getElementById('mobileFilterBtn');
+      const filters = document.getElementById('filters');
+
+      mobileFilterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = filters.classList.contains('hidden');
+
+        if (isHidden) {
+          filters.classList.remove('hidden');
+          filters.classList.add('opacity-0', '-translate-y-4');
+          setTimeout(() => {
+            filters.classList.remove('opacity-0', '-translate-y-4');
+          }, 10);
+          mobileFilterBtn.textContent = 'Закрыть фильтр'; // меняем текст
+        } else {
+          filters.classList.add('opacity-0', '-translate-y-4');
+          setTimeout(() => filters.classList.add('hidden'), 300);
+          mobileFilterBtn.textContent = 'Открыть фильтр'; // возвращаем исходный текст
+        }
+      });
+
+      // Закрытие фильтра при клике вне
+      document.addEventListener('click', (e) => {
+        if (!filters.contains(e.target) && !mobileFilterBtn.contains(e.target) && window.innerWidth < 768) {
+          if (!filters.classList.contains('hidden')) {
+            filters.classList.add('opacity-0', '-translate-y-4');
+            setTimeout(() => filters.classList.add('hidden'), 300);
+            mobileFilterBtn.textContent = 'Фильтры'; // возвращаем текст
+          }
+        }
+      });
+
+      // Закрытие по Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !filters.classList.contains('hidden') && window.innerWidth < 768) {
+          filters.classList.add('opacity-0', '-translate-y-4');
+          setTimeout(() => filters.classList.add('hidden'), 300);
+          mobileFilterBtn.textContent = 'Фильтры'; // возвращаем текст
+        }
+      });
+
   </script>
 
 </body>
