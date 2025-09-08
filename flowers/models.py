@@ -81,4 +81,4 @@ class Flower(models.Model):
     
     def get_absolute_url(self):
     # предполагаем, что у тебя есть view для детальной страницы цветка с именем 'flower_detail'
-        return reverse('flower_detail', kwargs={'pk': self.pk})
+        return reverse('flower_detail', args=[self.pk])

@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Flower
+from flowers.models import Flower
 
 class StaticViewSitemap(Sitemap):
     changefreq = "weekly"
