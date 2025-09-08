@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+Disallow:
 
-Sitemap: https://сказочныйсад.рф/sitemap.xml
+Sitemap: http://xn--80aamkkdxhxg7d7b.xn--p1ai/sitemap.xml
