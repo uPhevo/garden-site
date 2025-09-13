@@ -662,3 +662,204 @@ Traceback (most recent call last):
     )
 django.template.exceptions.TemplateSyntaxError: 'static' takes at least one argument (path to file)
 "GET / HTTP/1.1" 500 163433
+Internal Server Error: /submit-order/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 244, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 262, in __call__
+    return call_result.result()
+           ~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 302, in main_wrap
+    result = await awaitable
+             ^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/http.py", line 48, in inner
+    return await func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 225, in submit_order
+    cart = request.session.get('cart', {}) or {}
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 74, in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    self._session_cache = self.load()
+                          ~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        session_key=self.session_key, expire_date__gt=timezone.now()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor = self.connection.cursor()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/asyncio.py", line 24, in inner
+    raise SynchronousOnlyOperation(message)
+django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.
+"POST /submit-order/ HTTP/1.1" 500 130304
+Internal Server Error: /submit-order/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 244, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 262, in __call__
+    return call_result.result()
+           ~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 302, in main_wrap
+    result = await awaitable
+             ^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/http.py", line 48, in inner
+    return await func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 225, in submit_order
+    cart = request.session.get('cart', {}) or {}
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 74, in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    self._session_cache = self.load()
+                          ~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        session_key=self.session_key, expire_date__gt=timezone.now()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor = self.connection.cursor()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/asyncio.py", line 24, in inner
+    raise SynchronousOnlyOperation(message)
+django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.
+"POST /submit-order/ HTTP/1.1" 500 130294
+Internal Server Error: /submit-order/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 244, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 262, in __call__
+    return call_result.result()
+           ~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/asgiref/sync.py", line 302, in main_wrap
+    result = await awaitable
+             ^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/http.py", line 48, in inner
+    return await func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 225, in submit_order
+    cart = request.session.get('cart', {}) or {}
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 74, in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    self._session_cache = self.load()
+                          ~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        session_key=self.session_key, expire_date__gt=timezone.now()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor = self.connection.cursor()
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/asyncio.py", line 24, in inner
+    raise SynchronousOnlyOperation(message)
+django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.
+"POST /submit-order/ HTTP/1.1" 500 130304
