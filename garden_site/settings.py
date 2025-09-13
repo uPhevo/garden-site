@@ -48,14 +48,16 @@ CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([h for h in CSRF_TRUSTED_ORIGINS if h]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Email
+# Email settings для Mail.ru
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST", "mail.timeweb.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-EMAIL_USE_SSL = str(os.getenv("EMAIL_USE_SSL", "False")).strip().lower() in ("1", "true", "yes")
-EMAIL_USE_TLS = str(os.getenv("EMAIL_USE_TLS", "True")).strip().lower() in ("1", "true", "yes")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "info@сказочныйсад.рф")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "password")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+EMAIL_HOST = "smtp.mail.ru"       # Mail.ru SMTP сервер
+EMAIL_PORT = 465                   # SSL-порт для Mail.ru
+EMAIL_USE_SSL = True               # используем SSL
+EMAIL_USE_TLS = False              # не используем TLS с портом 465
+EMAIL_HOST_USER = "skazochniysad@mail.ru"        # твой логин
+EMAIL_HOST_PASSWORD = "a6ogWAtaYNohzyvO2qHz"    # пароль или пароль приложения Mail.ru
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 # apps / middleware
 INSTALLED_APPS = [
