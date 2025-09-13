@@ -1,17 +1,18 @@
-<!-- flowers/templates/flowers/detail.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Корзина — Сказочный сад</title>
+  <link rel="icon" href="{% static 'images/mini-logo.png' %}" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
     .block {
       min-height: 785px;
       position: relative;
       padding-bottom: 60px;
-    } 
+    }
     .block::after {
       content: "";
       min-height: 100vh;
@@ -53,6 +54,13 @@
       0% { transform: translate3d(0,0,0); opacity: 0.6; }
       50% { transform: translate3d(40px,-60px,0); opacity: 1; }
       100% { transform: translate3d(-30px,60px,0); opacity: 0.5; }
+    }
+
+    /* Немного уменьшим шанс, что сообщения займут весь экран */
+    #order-success-message, #order-error-message {
+      display: inline-block;
+      max-width: 100%;
+      word-wrap: break-word;
     }
   </style>
 </head>
@@ -118,22 +126,24 @@
       <section class="max-w-3xl mx-auto mt-12 bg-white bg-opacity-90 rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 relative z-10 w-[92%]">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">🛒 Ваша корзина</h2>
 
-        {% if items %}
+        {% if items|length > 0 %}
           {% for item in items %}
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b pb-2 text-gray-700">
+            <div class="cart-item flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b pb-2 text-gray-700">
               <span>{{ item.flower.name }} <span class="text-sm text-gray-500">(x{{ item.quantity }})</span></span>
               <span class="font-semibold mt-1 sm:mt-0">{{ item.subtotal }} ₽</span>
             </div>
           {% endfor %}
-          <p class="text-xl font-bold mt-8 text-right text-yellow-700">Итого: {{ total }} ₽</p>
+          <p id="cart-total" class="text-xl font-bold mt-8 text-right text-yellow-700">Итого: {{ total }} ₽</p>
 
-          <form method="post" action="{% url 'clear_cart' %}" class="mt-6">
+          <!-- Кнопка очистки корзины (появляется только если есть товары) -->
+          <form id="clear-cart-form" method="post" action="{% url 'clear_cart' %}" class="mt-6">
             {% csrf_token %}
             <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow w-full sm:w-auto">
               🗑️ Очистить корзину
             </button>
           </form>
 
+          <!-- Форма заказа -->
           <form id="order-form" class="mt-10 space-y-4">
             {% csrf_token %}
             <input type="text" name="name" placeholder="Ваше имя" required class="w-full p-3 border border-yellow-300 rounded-xl" />
@@ -151,10 +161,10 @@
           <p class="text-center text-gray-600 text-lg">Ваша корзина пуста 🧺</p>
         {% endif %}
 
-        <div id="order-success-message" class="mt-6 text-green-600 font-semibold text-lg hidden">
+        <div id="order-success-message" class="mt-6 text-green-600 font-semibold text-lg hidden" style="display:none;">
           ✅ Заказ отправлен! Спасибо! 😊
         </div>
-        <div id="order-error-message" class="mt-6 text-red-600 font-semibold text-lg hidden">
+        <div id="order-error-message" class="mt-6 text-red-600 font-semibold text-lg hidden" style="display:none;">
           ❌ Ошибка при отправке заказа. Попробуйте позже.
         </div>
       </section>
@@ -167,7 +177,137 @@
   </div>
 
   <script>
-    // Бургер меню
+    // ========== Инициализация UI ==========
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    (function initMessages() {
+      const s = document.getElementById('order-success-message');
+      const e = document.getElementById('order-error-message');
+      if (s) { s.classList.add('hidden'); s.style.display = 'none'; }
+      if (e) { e.classList.add('hidden'); e.style.display = 'none'; }
+    })();
+
+    // ========== Отправка заказа (AJAX) ==========
+    document.getElementById('order-form')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const successEl = document.getElementById('order-success-message');
+      const errorEl = document.getElementById('order-error-message');
+
+      // Спрятать старые сообщения
+      successEl.classList.add('hidden'); successEl.style.display = 'none';
+      errorEl.classList.add('hidden'); errorEl.style.display = 'none';
+
+      try {
+        const res = await fetch("{% url 'submit_order' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          credentials: 'same-origin',
+          body: data
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || `HTTP ${res.status}`);
+        }
+
+        const payload = await res.json();
+
+        if (payload && payload.success) {
+          successEl.textContent = payload.message || '✅ Заказ отправлен! Спасибо! 😊';
+          successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
+
+          // Очистка интерфейса корзины
+          document.querySelectorAll('.cart-item').forEach(el => el.remove());
+          const totalEl = document.getElementById('cart-total');
+          if (totalEl) totalEl.textContent = 'Итого: 0 ₽';
+
+          // Скрыть/удалить кнопки и формы
+          const clearForm = document.getElementById('clear-cart-form');
+          if (clearForm) clearForm.remove();
+          form.remove();
+        } else {
+          throw new Error(payload && payload.error ? payload.error : 'Неизвестная ошибка сервера');
+        }
+      } catch (err) {
+        console.error('Order error:', err);
+        errorEl.textContent = '❌ ' + (err.message || 'Ошибка при отправке заказа');
+        errorEl.classList.remove('hidden'); errorEl.style.display = 'inline-block';
+      }
+    });
+
+    // ========== Очистка корзины (AJAX) ==========
+    (function bindClearCart() {
+      const clearCartForm = document.getElementById('clear-cart-form');
+      if (!clearCartForm) return;
+
+      clearCartForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const successEl = document.getElementById('order-success-message');
+        const errorEl = document.getElementById('order-error-message');
+
+        successEl.classList.add('hidden'); successEl.style.display = 'none';
+        errorEl.classList.add('hidden'); errorEl.style.display = 'none';
+
+        try {
+          const res = await fetch(clearCartForm.action, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+          });
+
+          if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(txt || `HTTP ${res.status}`);
+          }
+
+          const payload = await res.json();
+          if (payload && payload.success) {
+            // Удаляем элементы корзины
+            document.querySelectorAll('.cart-item').forEach(el => el.remove());
+            const totalEl = document.getElementById('cart-total');
+            if (totalEl) totalEl.textContent = 'Итого: 0 ₽';
+
+            // Скрыть / удалить форму очистки и форму заказа
+            clearCartForm.remove();
+            const orderForm = document.getElementById('order-form');
+            if (orderForm) orderForm.remove();
+
+            // Показать аккуратное сообщение об успехе
+            successEl.textContent = '✅ Корзина очищена!';
+            successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
+          } else {
+            throw new Error(payload && payload.error ? payload.error : 'Неизвестная ошибка при очистке');
+          }
+        } catch (err) {
+          console.error('Clear cart error:', err);
+          errorEl.textContent = '❌ ' + (err.message || 'Ошибка очистки корзины');
+          errorEl.classList.remove('hidden'); errorEl.style.display = 'inline-block';
+        }
+      });
+    })();
+
+    // ========== Бургер меню ==========
     (function () {
       const menuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
@@ -202,7 +342,7 @@
       });
     })();
 
-    // Фейерверки
+    // ========== Fireflies ==========
     (() => {
       const container = document.querySelector(".fireflies-container");
       for (let i = 0; i < 20; i++) {
@@ -215,48 +355,6 @@
         container.appendChild(firefly);
       }
     })();
-
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-
-    document.getElementById('order-form')?.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const data = new FormData(form);
-      fetch("{% url 'submit_order' %}", {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": getCookie("csrftoken")
-        },
-        body: data
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          document.getElementById('order-success-message').classList.remove('hidden');
-          document.getElementById('order-error-message').classList.add('hidden');
-          form.reset();
-        } else {
-          throw new Error(data.error || "Неизвестная ошибка");
-        }
-      })
-      .catch(err => {
-        document.getElementById('order-error-message').classList.remove('hidden');
-        document.getElementById('order-success-message').classList.add('hidden');
-      });
-    });
   </script>
 </body>
 </html>
