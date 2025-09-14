@@ -961,3 +961,5 @@ Traceback (most recent call last):
     raise self.error(token, msg)
 django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 2: 'if'. Looking for one of: elif, else, endif.
 "GET /cart/ HTTP/1.1" 500 159636
+You're accessing the development server over HTTPS, but it only supports HTTP.
+You're accessing the development server over HTTPS, but it only supports HTTP.
