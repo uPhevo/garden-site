@@ -54,8 +54,8 @@ EMAIL_HOST = "smtp.mail.ru"       # Mail.ru SMTP сервер
 EMAIL_PORT = 465                   # SSL-порт для Mail.ru
 EMAIL_USE_SSL = True               # используем SSL
 EMAIL_USE_TLS = False              # не используем TLS с портом 465
-EMAIL_HOST_USER = "skazochniysad@mail.ru"        # твой логин
-EMAIL_HOST_PASSWORD = "a6ogWAtaYNohzyvO2qHz"    # пароль или пароль приложения Mail.ru
+EMAIL_HOST_USER = "skazochniysad54@mail.ru"        # твой логин
+EMAIL_HOST_PASSWORD = "etUx0dFmiQhunRaMBRJn"    # пароль или пароль приложения Mail.ru
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

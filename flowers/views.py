@@ -7,6 +7,11 @@ from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
 import json
 
+DELIVERY_CHOICES = {
+    "prom": "Доставка",
+    "samo": "Самовывоз",
+}
+
 
 def contacts_view(request):
     contacts = Contacts.objects.first()
@@ -123,8 +128,8 @@ def submit_consultation(request):
         send_mail(
             subject="📝 Запрос на консультацию — Сказочный сад",
             message=email_body,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
+            from_email="skazochniysad54@mail.ru",
+            recipient_list=["skazochniysad54@mail.ru"],
             fail_silently=False,
         )
         return JsonResponse({'success': True})
@@ -178,6 +183,7 @@ def submit_order(request):
     email = request.POST.get('email')
     phone = request.POST.get('phone')
     delivery = request.POST.get('delivery')
+    delivery_text = DELIVERY_CHOICES.get(delivery, delivery)
 
     if not all([name, email, phone, delivery]):
         return JsonResponse({'success': False, 'error': 'Пожалуйста, заполните все поля.'})
@@ -188,7 +194,13 @@ def submit_order(request):
 
     flowers = Flower.objects.filter(id__in=cart.keys())
     total = 0
-    message = f"Новый заказ от {name}\nEmail: {email}\nТелефон: {phone}\nДоставка: {delivery}\n\nЗаказ:\n"
+    message = (
+    f"Новый заказ от {name}\n"
+    f"Email: {email}\n"
+    f"Телефон: {phone}\n"
+    f"Доставка: {delivery_text}\n\nЗаказ:\n"
+    )
+
     for flower in flowers:
         qty = cart.get(str(flower.id), 0)
         subtotal = qty * flower.price
@@ -200,8 +212,8 @@ def submit_order(request):
         send_mail(
             subject="🌸 Новый заказ — Сказочный сад",
             message=message,
-            from_email="skazochniysad@mail.ru",
-            recipient_list=["skazochniysad@mail.ru"],
+            from_email="skazochniysad54@mail.ru",
+            recipient_list=["skazochniysad54@mail.ru"],
             fail_silently=False,
         )
         # очищаем корзину
