@@ -963,3 +963,637 @@ django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 2: 'if'. Lo
 "GET /cart/ HTTP/1.1" 500 159636
 You're accessing the development server over HTTPS, but it only supports HTTP.
 You're accessing the development server over HTTPS, but it only supports HTTP.
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: flowers_policy
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 17, in policy_view
+    policy = Policy.objects.filter(is_active=True).first() or Policy.objects.first()
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1104, in first
+    for obj in queryset[:1]:
+               ~~~~~~~~^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: flowers_policy
+"GET /policy/ HTTP/1.1" 500 133877
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: flowers_policy
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 17, in policy_view
+    policy = Policy.objects.filter(is_active=True).first() or Policy.objects.first()
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1104, in first
+    for obj in queryset[:1]:
+               ~~~~~~~~^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: flowers_policy
+"GET /policy/ HTTP/1.1" 500 133877
+Internal Server Error: /admin/flowers/policy/add/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: NOT NULL constraint failed: flowers_policy.slug
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 1984, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 1843, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 1894, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 1314, in save_model
+    obj.save()
+    ~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: NOT NULL constraint failed: flowers_policy.slug
+"POST /admin/flowers/policy/add/ HTTP/1.1" 500 207651
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 14, in policy_view
+    return render(request, "about.html", {"about": about})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: about.html
+"GET /policy/ HTTP/1.1" 500 84839
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 32, in policy_view
+    return render(request, "flowers/policy.html", {"policy": policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85208
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 32, in policy_view
+    return render(request, "flowers/policy.html", {"policy": policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85345
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 32, in policy_view
+    return render(request, "flowers/policy.html", {"policy": policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85345
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 32, in policy_view
+    return render(request, "flowers/policy.html", {"policy": policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85208
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 32, in policy_view
+    return render(request, "main/templates/main/policy.html", {"policy": policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: main/templates/main/policy.html
+"GET /policy/ HTTP/1.1" 500 85544
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 28, in policy_view
+    policy = Policy.objects.filter(is_active=True).first() or Policy.objects.first()
+             ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_active' into field. Choices are: content, id, updated_at
+"GET /policy/ HTTP/1.1" 500 111526
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 28, in policy_view
+    policy = Policy.objects.filter(is_active=True).first() or Policy.objects.first()
+             ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_active' into field. Choices are: content, id, updated_at
+"GET /policy/ HTTP/1.1" 500 111526
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 25, in policy_view
+    return render(request, 'flowers/policy.html', {'policy': policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85100
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 25, in policy_view
+    return render(request, 'flowers/policy.html', {'policy': policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85100
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 25, in policy_view
+    return render(request, 'flowers/policy.html', {'policy': policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 84963
+Internal Server Error: /policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/flowers/views.py", line 25, in policy_view
+    return render(request, 'main/policy.html', {'policy': policy})
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: flowers/policy.html
+"GET /policy/ HTTP/1.1" 500 85094
+Internal Server Error: /admin/flowers/policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: flowers_policy.title
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
+    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
+                                                           ~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: flowers_policy.title
+"GET /admin/flowers/policy/ HTTP/1.1" 500 173228
+Internal Server Error: /admin/flowers/policy/
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: flowers_policy.title
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
+    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
+                                                           ~~~^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/elklemente777gmail.com/Documents/SkazocniySad/project_root/venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: flowers_policy.title
+"GET /admin/flowers/policy/ HTTP/1.1" 500 173228

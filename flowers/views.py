@@ -1,16 +1,28 @@
+# flowers/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-from flowers.models import Flower, Category, WorkCondition, About, Contacts
 from django.db import models
+from django.db import OperationalError
+
 import json
+
+from .models import (
+    Flower, Category, WorkCondition, About, Contacts, Policy
+)
 
 DELIVERY_CHOICES = {
     "prom": "Доставка",
     "samo": "Самовывоз",
 }
+
+
+def policy_view(request):
+    # Берём последнюю (по updated_at) запись политики
+    policy = Policy.objects.order_by('-updated_at').first()
+    return render(request, 'main/policy.html', {'policy': policy})
 
 
 def contacts_view(request):
@@ -195,10 +207,10 @@ def submit_order(request):
     flowers = Flower.objects.filter(id__in=cart.keys())
     total = 0
     message = (
-    f"Новый заказ от {name}\n"
-    f"Email: {email}\n"
-    f"Телефон: {phone}\n"
-    f"Доставка: {delivery_text}\n\nЗаказ:\n"
+        f"Новый заказ от {name}\n"
+        f"Email: {email}\n"
+        f"Телефон: {phone}\n"
+        f"Доставка: {delivery_text}\n\nЗаказ:\n"
     )
 
     for flower in flowers:

@@ -12,6 +12,7 @@ from flowers.views import (
     clear_cart,
     submit_consultation,
     contacts_view,
+    policy_view,
 )
 
 urlpatterns = [
@@ -28,6 +29,8 @@ urlpatterns = [
     path('clear-cart/', clear_cart, name='clear_cart'),
     path('submit-order/', submit_order, name='submit_order'),
     path('submit-consultation/', submit_consultation, name='submit_consultation'),
+    path('policy/', policy_view, name='policy'),                
+    path('policy/<slug:slug>/', policy_view, name='policy_detail'),
 
     # Фильтр и каталог
     path('catalog-data/', catalog_data, name='catalog_data'),

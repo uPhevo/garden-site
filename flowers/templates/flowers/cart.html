@@ -146,19 +146,30 @@
 
           <!-- Форма заказа -->
           <form id="order-form" class="mt-10 space-y-4">
-            {% csrf_token %}
-            <input type="text" name="name" placeholder="Ваше имя" required class="w-full p-3 border border-yellow-300 rounded-xl" />
-            <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-yellow-300 rounded-xl" />
-            <input type="text" name="phone" placeholder="Телефон" required class="w-full p-3 border border-yellow-300 rounded-xl" />
-            <select name="delivery" class="w-full p-3 border border-yellow-300 rounded-xl">
-              <option value="cdek">СДЭК</option>
-              <option value="post">Почта России</option>
-              <option value="samo">Самовывоз</option>
-            </select>
-            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg">
-              🌸 Оформить заказ
-            </button>
-          </form>
+          {% csrf_token %}
+          <input type="text" name="name" placeholder="Ваше имя" required class="w-full p-3 border border-yellow-300 rounded-xl" />
+          <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-yellow-300 rounded-xl" />
+          <input type="text" name="phone" placeholder="Телефон" required class="w-full p-3 border border-yellow-300 rounded-xl" />
+          <select name="delivery" class="w-full p-3 border border-yellow-300 rounded-xl">
+            <option value="cdek">СДЭК</option>
+            <option value="post">Почта России</option>
+            <option value="samo">Самовывоз</option>
+          </select>
+
+          <!-- Чекбокс с кнопкой -->
+          <div class="flex items-center space-x-2">
+            <input type="checkbox" id="agree" name="agree" class="w-4 h-4 border-yellow-300 rounded" />
+            <label for="agree" class="text-gray-700 text-sm">
+              Я согласен с <a href="{% url 'policy' %}" class="text-yellow-600 underline hover:text-yellow-700" target="_blank">условиями обработки данных</a>
+            </label>
+          </div>
+
+          <!-- Кнопка отправки изначально заблокирована -->
+          <button id="submit-button" type="submit" disabled class="w-full bg-yellow-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg cursor-not-allowed">
+            🌸 Оформить заказ
+          </button>
+        </form>
+
         {% else %}
           <p class="text-center text-gray-600 text-lg">Ваша корзина пуста 🧺</p>
         {% endif %}
@@ -178,185 +189,200 @@
     </footer>
   </div>
 
-  <script>
-    // ========== Инициализация UI ==========
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
+ <script>
+  // ========== Инициализация UI ==========
+  const agreeCheckbox = document.getElementById('agree');
+  const submitButton = document.getElementById('submit-button');
+
+  if (agreeCheckbox && submitButton) {
+    submitButton.disabled = true; 
+    submitButton.classList.add('bg-yellow-300', 'cursor-not-allowed');
+
+    agreeCheckbox.addEventListener('change', () => {
+      if (agreeCheckbox.checked) {
+        submitButton.disabled = false;
+        submitButton.classList.remove('bg-yellow-300', 'cursor-not-allowed');
+        submitButton.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'cursor-pointer');
+      } else {
+        submitButton.disabled = true;
+        submitButton.classList.add('bg-yellow-300', 'cursor-not-allowed');
+        submitButton.classList.remove('bg-yellow-500', 'hover:bg-yellow-600', 'cursor-pointer');
+      }
+    });
+  }
+
+  // ========== Получение CSRF ==========
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
       }
-      return cookieValue;
     }
+    return cookieValue;
+  }
 
-    (function initMessages() {
-      const s = document.getElementById('order-success-message');
-      const e = document.getElementById('order-error-message');
-      if (s) { s.classList.add('hidden'); s.style.display = 'none'; }
-      if (e) { e.classList.add('hidden'); e.style.display = 'none'; }
-    })();
+  // ========== Инициализация сообщений ==========
+  (function initMessages() {
+    const successEl = document.getElementById('order-success-message');
+    const errorEl = document.getElementById('order-error-message');
+    if (successEl) { successEl.classList.add('hidden'); successEl.style.display = 'none'; }
+    if (errorEl) { errorEl.classList.add('hidden'); errorEl.style.display = 'none'; }
+  })();
 
-    // ========== Отправка заказа (AJAX) ==========
-    document.getElementById('order-form')?.addEventListener('submit', async function(e) {
+  // ========== Отправка заказа (AJAX) ==========
+  document.getElementById('order-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const successEl = document.getElementById('order-success-message');
+    const errorEl = document.getElementById('order-error-message');
+
+    successEl.classList.add('hidden'); successEl.style.display = 'none';
+    errorEl.classList.add('hidden'); errorEl.style.display = 'none';
+
+    try {
+      const res = await fetch("{% url 'submit_order' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin',
+        body: data
+      });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `HTTP ${res.status}`);
+      }
+
+      const payload = await res.json();
+
+      if (payload && payload.success) {
+        successEl.textContent = payload.message || '✅ Заказ отправлен! Спасибо! 😊';
+        successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
+
+        // Удаляем только элементы корзины, но НЕ обнуляем сумму
+        document.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+        // Не трогаем #cart-total, чтобы сумма осталась видимой
+        // document.getElementById('cart-total').textContent = 'Итого: 0 ₽';
+
+        // Скрыть/удалить формы и кнопки
+        const clearForm = document.getElementById('clear-cart-form');
+        if (clearForm) clearForm.remove();
+        form.remove();
+      } else {
+        throw new Error(payload && payload.error ? payload.error : 'Неизвестная ошибка сервера');
+      }
+    } catch (err) {
+      console.error('Order error:', err);
+      errorEl.textContent = '❌ ' + (err.message || 'Ошибка при отправке заказа');
+      errorEl.classList.remove('hidden'); errorEl.style.display = 'inline-block';
+    }
+  });
+
+  // ========== Очистка корзины (AJAX) ==========
+  (function bindClearCart() {
+    const clearCartForm = document.getElementById('clear-cart-form');
+    if (!clearCartForm) return;
+
+    clearCartForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      const form = e.target;
-      const data = new FormData(form);
       const successEl = document.getElementById('order-success-message');
       const errorEl = document.getElementById('order-error-message');
 
-      // Спрятать старые сообщения
       successEl.classList.add('hidden'); successEl.style.display = 'none';
       errorEl.classList.add('hidden'); errorEl.style.display = 'none';
 
       try {
-        const res = await fetch("{% url 'submit_order' %}", {
+        const res = await fetch(clearCartForm.action, {
           method: 'POST',
           headers: {
             'X-CSRFToken': getCookie('csrftoken'),
             'X-Requested-With': 'XMLHttpRequest'
           },
-          credentials: 'same-origin',
-          body: data
+          credentials: 'same-origin'
         });
 
-        if (!res.ok) {
-          const txt = await res.text();
-          throw new Error(txt || `HTTP ${res.status}`);
-        }
-
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const payload = await res.json();
 
         if (payload && payload.success) {
-          successEl.textContent = payload.message || '✅ Заказ отправлен! Спасибо! 😊';
-          successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
-
-          // Очистка интерфейса корзины
-          document.querySelectorAll('.cart-item').forEach(el => el.remove());
           const totalEl = document.getElementById('cart-total');
           if (totalEl) totalEl.textContent = 'Итого: 0 ₽';
 
-          // Скрыть/удалить кнопки и формы
-          const clearForm = document.getElementById('clear-cart-form');
-          if (clearForm) clearForm.remove();
-          form.remove();
-        } else {
-          throw new Error(payload && payload.error ? payload.error : 'Неизвестная ошибка сервера');
-        }
+          clearCartForm.remove();
+          const orderForm = document.getElementById('order-form');
+          if (orderForm) orderForm.remove();
+
+          successEl.textContent = '✅ Корзина очищена!';
+          successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
+        } else throw new Error(payload.error || 'Неизвестная ошибка при очистке');
       } catch (err) {
-        console.error('Order error:', err);
-        errorEl.textContent = '❌ ' + (err.message || 'Ошибка при отправке заказа');
+        console.error('Clear cart error:', err);
+        errorEl.textContent = '❌ ' + (err.message || 'Ошибка очистки корзины');
         errorEl.classList.remove('hidden'); errorEl.style.display = 'inline-block';
       }
     });
+  })();
 
-    // ========== Очистка корзины (AJAX) ==========
-    (function bindClearCart() {
-      const clearCartForm = document.getElementById('clear-cart-form');
-      if (!clearCartForm) return;
+  // ========== Бургер меню ==========
+  (function () {
+    const menuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-      clearCartForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const successEl = document.getElementById('order-success-message');
-        const errorEl = document.getElementById('order-error-message');
+    if (!menuButton || !mobileMenu) return;
 
-        successEl.classList.add('hidden'); successEl.style.display = 'none';
-        errorEl.classList.add('hidden'); errorEl.style.display = 'none';
+    menuButton.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      mobileMenu.setAttribute('aria-hidden', String(isHidden));
+      menuButton.setAttribute('aria-expanded', String(!isHidden));
+    });
 
-        try {
-          const res = await fetch(clearCartForm.action, {
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': getCookie('csrftoken'),
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'same-origin'
-          });
+    mobileMenu.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+    });
 
-          if (!res.ok) {
-            const txt = await res.text();
-            throw new Error(txt || `HTTP ${res.status}`);
-          }
-
-          const payload = await res.json();
-          if (payload && payload.success) {
-            // Удаляем элементы корзины
-            document.querySelectorAll('.cart-item').forEach(el => el.remove());
-            const totalEl = document.getElementById('cart-total');
-            if (totalEl) totalEl.textContent = 'Итого: 0 ₽';
-
-            // Скрыть / удалить форму очистки и форму заказа
-            clearCartForm.remove();
-            const orderForm = document.getElementById('order-form');
-            if (orderForm) orderForm.remove();
-
-            // Показать аккуратное сообщение об успехе
-            successEl.textContent = '✅ Корзина очищена!';
-            successEl.classList.remove('hidden'); successEl.style.display = 'inline-block';
-          } else {
-            throw new Error(payload && payload.error ? payload.error : 'Неизвестная ошибка при очистке');
-          }
-        } catch (err) {
-          console.error('Clear cart error:', err);
-          errorEl.textContent = '❌ ' + (err.message || 'Ошибка очистки корзины');
-          errorEl.classList.remove('hidden'); errorEl.style.display = 'inline-block';
-        }
-      });
-    })();
-
-    // ========== Бургер меню ==========
-    (function () {
-      const menuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
-
-      if (!menuButton || !mobileMenu) return;
-
-      menuButton.addEventListener('click', function (ev) {
-        ev.stopPropagation();
-        const isHidden = mobileMenu.classList.toggle('hidden');
-        mobileMenu.setAttribute('aria-hidden', String(isHidden));
-        menuButton.setAttribute('aria-expanded', String(!isHidden));
-      });
-
-      mobileMenu.addEventListener('click', function (ev) {
-        ev.stopPropagation();
-      });
-
-      document.addEventListener('click', function () {
-        if (!mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-          mobileMenu.setAttribute('aria-hidden', 'true');
-          menuButton.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      document.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-          mobileMenu.setAttribute('aria-hidden', 'true');
-          menuButton.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-
-    // ========== Fireflies ==========
-    (() => {
-      const container = document.querySelector(".fireflies-container");
-      for (let i = 0; i < 20; i++) {
-        const firefly = document.createElement("div");
-        firefly.classList.add("firefly");
-        firefly.style.top = `${Math.random() * 100}%`;
-        firefly.style.left = `${Math.random() * 100}%`;
-        firefly.style.animationDuration = `${5 + Math.random() * 6}s`;
-        firefly.style.animationDelay = `${Math.random() * 5}s`;
-        container.appendChild(firefly);
+    document.addEventListener('click', function () {
+      if (!mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
       }
-    })();
-  </script>
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
+  // ========== Fireflies ==========
+  (() => {
+    const container = document.querySelector(".fireflies-container");
+    if (!container) return;
+
+    for (let i = 0; i < 20; i++) {
+      const firefly = document.createElement("div");
+      firefly.classList.add("firefly");
+      firefly.style.top = `${Math.random() * 100}%`;
+      firefly.style.left = `${Math.random() * 100}%`;
+      firefly.style.animationDuration = `${5 + Math.random() * 6}s`;
+      firefly.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(firefly);
+    }
+  })();
+</script>
 </body>
 </html>

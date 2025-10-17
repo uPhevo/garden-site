@@ -1,6 +1,27 @@
 from django.db import models
-from ckeditor_uploader.fields import RichTextUploadingField  
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.urls import reverse
+from django.utils.text import slugify
+import uuid
+
+class Policy(models.Model):
+    """
+    Минимальная модель: редакторное поле (аналог Word).
+    """
+    title = models.CharField(max_length=200, default="Политика конфиденциальности", verbose_name="Заголовок")
+    content = RichTextUploadingField(verbose_name="Основной текст")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
+
+    class Meta:
+        verbose_name = "Политика конфиденциальности"
+        verbose_name_plural = "Политика конфиденциальности"
+        ordering = ['-updated_at']
+
+    def __str__(self):
+        # Просто показываем дату последнего обновления, без несуществующего поля
+        return f"Политика от {self.updated_at.strftime('%d.%m.%Y %H:%M')}"
+
+
 
 class Contacts(models.Model):
     title = models.CharField(max_length=200, default="Связь с нами", verbose_name="Заголовок")
