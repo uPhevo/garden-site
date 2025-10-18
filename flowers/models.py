@@ -5,9 +5,6 @@ from django.utils.text import slugify
 import uuid
 
 class Policy(models.Model):
-    """
-    Минимальная модель: редакторное поле (аналог Word).
-    """
     title = models.CharField(max_length=200, default="Политика конфиденциальности", verbose_name="Заголовок")
     content = RichTextUploadingField(verbose_name="Основной текст")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
@@ -20,7 +17,6 @@ class Policy(models.Model):
     def __str__(self):
         # Просто показываем дату последнего обновления, без несуществующего поля
         return f"Политика от {self.updated_at.strftime('%d.%m.%Y %H:%M')}"
-
 
 
 class Contacts(models.Model):
@@ -101,5 +97,29 @@ class Flower(models.Model):
         return self.name
     
     def get_absolute_url(self):
-    # предполагаем, что у тебя есть view для детальной страницы цветка с именем 'flower_detail'
+        # предполагаем, что у тебя есть view для детальной страницы цветка с именем 'flower_detail'
         return reverse('flower_detail', args=[self.pk])
+
+
+# -------------------------
+# Новая модель Review
+# -------------------------
+class Review(models.Model):
+    RATING_CHOICES = [(i, f"{i} ⭐") for i in range(1, 6)]
+
+    name = models.CharField("Имя", max_length=120)
+    email = models.EmailField("Email", blank=True, null=True)
+    rating = models.IntegerField("Оценка", choices=RATING_CHOICES, default=5)
+    text = models.TextField("Текст отзыва", max_length=2000)
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата изменения", auto_now=True)
+    is_published = models.BooleanField("Опубликовать", default=True, help_text="Если включено — отзыв виден на сайте")
+    admin_notes = models.TextField("Заметки администратора", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} — {self.rating} / {self.created_at.strftime('%d.%m.%Y')}"

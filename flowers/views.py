@@ -10,8 +10,10 @@ from django.db import OperationalError
 import json
 
 from .models import (
-    Flower, Category, WorkCondition, About, Contacts, Policy
+    Flower, Category, WorkCondition, About, Contacts, Policy, Review
 )
+
+from django.views.decorators.http import require_http_methods
 
 DELIVERY_CHOICES = {
     "prom": "Доставка",
@@ -267,3 +269,54 @@ def toggle_cart(request, flower_id):
     request.session['cart'] = cart
     request.session.modified = True
     return JsonResponse({'added': added, 'quantity': cart.get(flower_id_str, 0)})
+
+def reviews_view(request):
+    """
+    Показывает страницу отзывов. Отображаем только опубликованные отзывы.
+    """
+    reviews = Review.objects.filter(is_published=True).order_by('-created_at')
+    # Передаём также форму / данные в шаблон
+    return render(request, 'main/reviews.html', {'reviews': reviews})
+
+
+@require_POST
+def submit_review(request):
+    """
+    Принимает POST (AJAX или обычный) и сохраняет отзыв в БД.
+    Возвращает JSON с данными отзыва для немедленного отображения.
+    """
+    name = request.POST.get('name', '').strip()
+    email = request.POST.get('email', '').strip()
+    rating = request.POST.get('rating')
+    text = request.POST.get('text', '').strip()
+
+    if not name or not text:
+        return JsonResponse({'success': False, 'error': 'Пожалуйста, укажите имя и текст отзыва.'}, status=400)
+
+    try:
+        rating = int(rating) if rating else 5
+        if rating < 1 or rating > 5:
+            rating = 5
+    except ValueError:
+        rating = 5
+
+    # Сохраняем отзыв — по умолчанию публикуем (is_published=True), чтобы сразу отображался.
+    review = Review.objects.create(
+        name=name,
+        email=email or None,
+        rating=rating,
+        text=text,
+        is_published=True
+    )
+
+    # Формируем данные для ответа
+    return JsonResponse({
+        'success': True,
+        'review': {
+            'id': review.id,
+            'name': review.name,
+            'rating': review.rating,
+            'text': review.text,
+            'created_at': review.created_at.strftime('%d.%m.%Y %H:%M')
+        }
+    })

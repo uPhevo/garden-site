@@ -1,7 +1,7 @@
 # flowers/admin.py
 from django.contrib import admin
 from django.utils.html import strip_tags
-from flowers.models import Category, Flower, WorkCondition, About, Contacts, Policy
+from flowers.models import Category, Flower, WorkCondition, About, Contacts, Policy, Review
 
 @admin.register(Policy)
 class PolicyAdmin(admin.ModelAdmin):
@@ -44,3 +44,30 @@ class CategoryAdmin(admin.ModelAdmin):
 class FlowerAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "price")
     list_filter = ("category", "in_stock")
+
+
+# -------------------------
+# Review admin
+# -------------------------
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'rating', 'short_text', 'is_published', 'created_at')
+    list_filter = ('is_published', 'rating', 'created_at')
+    search_fields = ('name', 'text', 'email')
+    readonly_fields = ('created_at', 'updated_at')
+    actions = ['make_published', 'make_unpublished']
+
+    def short_text(self, obj):
+        txt = obj.text or ''
+        return (txt[:80] + '...') if len(txt) > 80 else txt
+    short_text.short_description = 'Отзыв'
+
+    def make_published(self, request, queryset):
+        updated = queryset.update(is_published=True)
+        self.message_user(request, f"{updated} отзыв(ов) опубликовано.")
+    make_published.short_description = "Опубликовать выбранные отзывы"
+
+    def make_unpublished(self, request, queryset):
+        updated = queryset.update(is_published=False)
+        self.message_user(request, f"{updated} отзыв(ов) снято с публикации.")
+    make_unpublished.short_description = "Снять публикацию с выбранных отзывов"

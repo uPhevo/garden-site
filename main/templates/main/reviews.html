@@ -1,0 +1,418 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Отзывы — Сказочный сад</title>
+  <meta name="description" content="Отзывы клиентов — Сказочный сад. Оставьте свой отзыв о покупке или сервисе." />
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --accent: #f5b532;
+      --accent-dark: #d4881f;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(to bottom, #ffffff 0%, #f7f7f8 100%);
+      color: #1f2937;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .hero-block {
+      border-radius: 1.25rem;
+      overflow: hidden;
+      position: relative;
+      max-width: 92%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 1.75rem;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,0) 12%, rgba(255,255,255,0.92) 100%),
+        url({% static 'images/photo_2025-07-31_21-01-57-redefine-realistic-4x.jpeg' %});
+      background-size: cover;
+      background-position: center;
+      filter: brightness(96%);
+      animation: slowZoom 60s infinite alternate linear;
+      z-index: 0;
+    }
+
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(20,20,20,0.06);
+    }
+
+    .rating-dot {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg, var(--accent), #ffd36a);
+      color:white;
+      font-weight:700;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .fireflies-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .firefly {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.15) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 12px gold;
+      opacity: 0.8;
+      animation: moveFirefly linear infinite;
+    }
+
+    @keyframes moveFirefly {
+      0% { transform: translate3d(0,0,0); opacity: 0.5; }
+      50% { transform: translate3d(30px,-40px,0); opacity: 1; }
+      100% { transform: translate3d(-20px,40px,0); opacity: 0.45; }
+    }
+
+    /* header tweaks to match site */
+    header .logo-img { height: 64px; object-fit: contain; }
+    @media (min-width: 768px) {
+      header .logo-img { height: 86px; }
+    }
+
+    /* subtle typography */
+    h1 { font-weight: 700; letter-spacing: -0.02em; }
+
+    /* muted class (left intact) */
+    .muted { color: #6b7280; }
+
+    /*
+      New hero note style: white text on background image,
+      subtle translucent backdrop + text-shadow for legibility.
+    */
+    .hero-note {
+      color: #ffffff !important;
+      background: rgba(0,0,0,0.12); /* slight dark overlay for contrast */
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: inline-block;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      max-width: 56rem;
+      margin-left: auto;
+      margin-right: auto;
+      text-shadow: 0 6px 20px rgba(0,0,0,0.45);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 768px) {
+      .hero-note { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Верхний белый градиент -->
+  <div class="absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-yellow-600 to-transparent opacity-80 pointer-events-none z-0"></div>
+
+<!-- =========== HEADER (заменить старый) =========== -->
+<header class="bg-white bg-opacity-80 h-20 shadow-lg sticky top-0 z-50 backdrop-blur-md">
+  <div class="fireflies-container"></div>
+  <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between relative">
+
+    <!-- Логотип -->
+    <div class="absolute -top-2">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="Логотип" class="h-24 object-contain" />
+      </a>
+    </div>
+
+    <!-- Десктопная навигация -->
+    <nav class="hidden md:flex ml-auto items-center h-full space-x-4 md:space-x-6 text-base text-black">
+      <a href="{% url 'catalog' %}" class="flex items-center h-full hover:text-yellow-600 transition">Каталог</a>
+      <a href="{% url 'about' %}" class="flex items-center h-full hover:text-yellow-600 transition">О нас</a>
+      <a href="{% url 'reviews' %}" class="flex items-center h-full hover:text-yellow-600 transition">Отзывы</a>
+      <a href="{% url 'contacts' %}" class="flex items-center h-full hover:text-yellow-600 transition">Связь</a>
+      <a href="{% url 'personals' %}" class="flex items-center h-full hover:text-yellow-600 transition">Условия работы</a>
+    </nav>
+
+    <!-- Мобильные элементы: бургер + корзина -->
+    <div class="flex items-center ml-auto md:ml-0 space-x-2">
+      <!-- Бургер меню для mobile (согласованный id) -->
+      <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden focus:outline-none p-1" title="Меню">
+        <!-- SVG: квадрат с закруглениями и белыми полосками -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 40 40" fill="none" class="text-yellow-500 hover:text-yellow-600" role="img" aria-hidden="true">
+          <rect x="0" y="0" width="40" height="40" rx="8" ry="8" fill="currentColor" />
+          <rect x="10" y="12" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="18.5" width="20" height="3" rx="1.5" fill="white"/>
+          <rect x="10" y="25" width="20" height="3" rx="1.5" fill="white"/>
+        </svg>
+      </button>
+
+      <!-- Кнопка корзины (всегда справа и не двигается) -->
+      <a href="{% url 'cart_view' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold text-sm px-3 md:px-4 rounded-xl shadow flex items-center h-10 transition-all duration-200">
+        🛒 Корзина
+      </a>
+    </div>
+  </div>
+
+  <!-- Мобильное меню (скрыто по умолчанию) -->
+  <div id="mobile-menu"
+      class="hidden absolute top-16 right-4 w-44 bg-white rounded-xl shadow-lg z-50 ring-1 ring-black/5 overflow-hidden"
+      role="menu" aria-hidden="true">
+    <nav class="flex flex-col" role="none">
+      <a role="menuitem" href="{% url 'catalog' %}"   class="bloc px-4 py-3 текст-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Каталог</a>
+      <a role="menuitem" href="{% url 'about' %}"     class="bloc px-4 py-3 текст-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">О нас</a>
+      <a role="menuitem" href="{% url 'reviews' %}"  class="bloc px-4 py-3 текст-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Отзывы</a>
+      <a role="menuitem" href="{% url 'contacts' %}"  class="bloc px-4 py-3 текст-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Связь</a>
+      <a role="menuitem" href="{% url 'personals' %}" class="bloc px-4 py-3 текст-sm font-medium hover:bg-yellow-50 transition border-b last:border-b-0">Условия работы</a>
+    </nav>
+  </div>
+</header>
+
+  <!-- Hero (плавный фон, заголовок страницы) -->
+  <section class="hero-block mx-auto max-w-5xl">
+    <div class="hero-bg"></div>
+    <div class="relative z-10 p-6 md:p-10 text-center">
+      <h1 class="text-3xl md:text-4xl mb-2 text-white">Отзывы клиентов</h1>
+      <p class="hero-note">
+         Поделитесь впечатлениями о покупке — отзыв появится на странице и сохранится в админке.
+      </p>
+    </div>
+  </section>
+
+  <!-- Основной контент -->
+  <main class="max-w-5xl mx-auto px-4 md:px-0 py-8 relative z-10">
+    <!-- Форма оставления отзыва -->
+    <section class="mb-8">
+      <div class="card p-6">
+        <h2 class="text-lg font-semibold mb-3">Оставить отзыв</h2>
+
+        <form id="review-form" class="space-y-4" method="post" action="{% url 'submit_review' %}">
+          {% csrf_token %}
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input name="name" required placeholder="Ваше имя" class="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-200" />
+            <input name="email" placeholder="Email (необязательно)" class="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-200" />
+            <select name="rating" class="p-3 border rounded-lg">
+              <option value="5">5 — Отлично</option>
+              <option value="4">4 — Хорошо</option>
+              <option value="3">3 — Нормально</option>
+              <option value="2">2 — Плохо</option>
+              <option value="1">1 — Ужасно</option>
+            </select>
+          </div>
+
+          <textarea name="text" rows="5" placeholder="Ваш отзыв..." class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-200" required></textarea>
+
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-500">Нажимая «Отправить», вы соглашаетесь с <a href="{% url 'policy' %}" class="underline text-yellow-600">Политикой конфиденциальности</a>.</div>
+            <button id="review-submit" type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:opacity-95">Отправить отзыв</button>
+          </div>
+        </form>
+
+        <p id="review-success" class="mt-3 text-green-600 hidden">✅ Спасибо! Ваш отзыв опубликован.</p>
+        <p id="review-error" class="mt-3 text-red-600 hidden"></p>
+      </div>
+    </section>
+
+    <!-- Лента отзывов -->
+    <section>
+      <div id="reviews-list" class="space-y-4">
+        {% for r in reviews %}
+        <article class="card p-4 flex items-start space-x-4">
+          <div class="rating-dot">{{ r.rating }}</div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">{{ r.name }}</div>
+              <div class="text-sm text-gray-500">{{ r.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div class="text-gray-700 mt-2">{{ r.text|linebreaks }}</div>
+          </div>
+        </article>
+        {% empty %}
+        <div class="card p-6 text-center text-gray-500">Пока нет отзывов — будьте первым!</div>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-100 py-7 text-center text-gray-500 text-sm mt-12">
+    &copy; 2025 Сказочный сад.
+  </footer>
+
+  <!-- Скрипты: fireflies, mobile menu, AJAX submit -->
+  <script>
+    // ========== FIRELIES ==========
+    (function initFireflies() {
+      const containers = document.querySelectorAll(".fireflies-container");
+      containers.forEach(cont => {
+        for (let i = 0; i < 18; i++) {
+          const f = document.createElement('div');
+          f.classList.add('firefly');
+          f.style.top = `${Math.random() * 100}%`;
+          f.style.left = `${Math.random() * 100}%`;
+          f.style.animationDuration = `${5 + Math.random() * 6}s`;
+          f.style.animationDelay = `${Math.random() * 5}s`;
+          cont.appendChild(f);
+        }
+      });
+    })();
+
+    // ========== MOBILE MENU ==========
+    (function () {
+      const menuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (!menuButton || !mobileMenu) return;
+
+      menuButton.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        const isHidden = mobileMenu.classList.toggle('hidden');
+        mobileMenu.setAttribute('aria-hidden', String(isHidden));
+        menuButton.setAttribute('aria-expanded', String(!isHidden));
+      });
+
+      mobileMenu.addEventListener('click', function (ev) { ev.stopPropagation(); });
+
+      document.addEventListener('click', function () {
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+
+    // ========== CSRF helper ==========
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // ========== AJAX submit review ==========
+    document.getElementById('review-form')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('review-submit');
+      const successEl = document.getElementById('review-success');
+      const errorEl = document.getElementById('review-error');
+
+      successEl.classList.add('hidden');
+      errorEl.classList.add('hidden');
+
+      const data = new FormData(form);
+
+      btn.disabled = true;
+      const prevText = btn.textContent;
+      btn.textContent = 'Отправка...';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: data,
+          credentials: 'same-origin'
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || `HTTP ${res.status}`);
+        }
+
+        const payload = await res.json();
+        if (payload && payload.success && payload.review) {
+          const r = payload.review;
+          const container = document.getElementById('reviews-list');
+
+          const article = document.createElement('article');
+          article.className = 'card p-4 flex items-start space-x-4';
+
+          article.innerHTML = `
+            <div class="rating-dot">${r.rating}</div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold">${escapeHtml(r.name)}</div>
+                <div class="text-sm text-gray-500">${r.created_at}</div>
+              </div>
+              <div class="text-gray-700 mt-2">${nl2br(escapeHtml(r.text))}</div>
+            </div>
+          `;
+
+          container.insertBefore(article, container.firstChild);
+          form.reset();
+          successEl.classList.remove('hidden');
+        } else {
+          throw new Error(payload.error || 'Не удалось отправить отзыв.');
+        }
+      } catch (err) {
+        console.error('Review error:', err);
+        errorEl.textContent = err.message || 'Ошибка при отправке отзыва';
+        errorEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prevText;
+      }
+    });
+
+    // ========== Utilities ==========
+    function escapeHtml(unsafe) {
+      return (unsafe + '')
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function nl2br(str) {
+      return (str + '').replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>

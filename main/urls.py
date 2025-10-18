@@ -13,6 +13,8 @@ from flowers.views import (
     submit_consultation,
     contacts_view,
     policy_view,
+    reviews_view, 
+    submit_review
 )
 
 urlpatterns = [
@@ -31,7 +33,8 @@ urlpatterns = [
     path('submit-consultation/', submit_consultation, name='submit_consultation'),
     path('policy/', policy_view, name='policy'),                
     path('policy/<slug:slug>/', policy_view, name='policy_detail'),
-
+    path('reviews/', reviews_view, name='reviews'),
+    path('reviews/submit/', submit_review, name='submit_review'),
     # Фильтр и каталог
     path('catalog-data/', catalog_data, name='catalog_data'),
     path('catalog/', catalog, name='catalog'),
