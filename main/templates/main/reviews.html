@@ -230,7 +230,7 @@
           <textarea name="text" rows="5" placeholder="Ваш отзыв..." class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-200" required></textarea>
 
           <div class="flex items-center justify-between">
-            <div class="text-sm text-gray-500">Нажимая «Отправить», вы соглашаетесь с <a href="{% url 'policy' %}" class="underline text-yellow-600">Политикой конфиденциальности</a>.</div>
+            {% comment %} <div class="text-sm text-gray-500">Нажимая «Отправить», вы соглашаетесь с <a href="{% url 'policy' %}" class="underline text-yellow-600">Политикой конфиденциальности</a>.</div> {% endcomment %}
             <button id="review-submit" type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:opacity-95">Отправить отзыв</button>
           </div>
         </form>
